@@ -12,3 +12,6 @@ __pycache__
 web/client/public
 !web/client/public/assets
 node_modules
+
+# JetBrains IDE
+**/.idea
