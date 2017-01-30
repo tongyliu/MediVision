@@ -1,0 +1,9 @@
+# OS generated & temporary files
+.DS_Store
+Thumbs.db
+*.~
+*.swp
+
+# Python stuff
+*.pyc
+__pycache__
