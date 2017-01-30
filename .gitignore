@@ -7,3 +7,8 @@ Thumbs.db
 # Python stuff
 *.pyc
 __pycache__
+
+# Front-end stuff
+web/client/public
+!web/client/public/assets
+node_modules
