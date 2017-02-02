@@ -15,3 +15,6 @@ node_modules
 
 # JetBrains IDE
 **/.idea
+
+# Virtualenv
+**/env
