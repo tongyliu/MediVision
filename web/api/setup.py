@@ -7,7 +7,7 @@
 from setuptools import setup
 
 setup(
-    name='mediserver',
+    name='MediVision-Server',
     version='0.0.1',
     description="central server for video stream coordination",
     author='han',
