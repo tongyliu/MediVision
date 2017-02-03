@@ -1,4 +1,4 @@
-/**
+/*
  * main.js
  *
  * Entry point into the app
@@ -6,21 +6,26 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var ReactRouter = require('react-router');
+
+var HomePage = require('./components/home-page');
+var BroadcasterPage = require('./components/broadcaster-page');
+var StreamsPage = require('./components/streams-page');
+var ViewerPage = require('./components/viewer-page');
+
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var browserHistory = ReactRouter.browserHistory;
 
 var App = React.createClass({
   render: function() {
     return (
-      <div className='app'>
-        <h1>Hello, World!</h1>
-        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
-               poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
-          <source src="/oceans.mp4" type='video/mp4'/>
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that
-                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-              </p>
-        </video>
-      </div>
+      <Router history={browserHistory}>
+        <Route exact path="/" component={HomePage}/>
+        <Route path="/broadcast" component={BroadcasterPage}/>
+        <Route path="/streams" component={StreamsPage}/>
+        <Route path="/view-stream" component={ViewerPage}/>
+      </Router>
     );
   }
 });

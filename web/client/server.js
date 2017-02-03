@@ -8,9 +8,13 @@ server.set('port', process.env.PORT || 4000);
 server.engine('hbs', handlebars());
 server.set('view engine', 'hbs');
 server.set('views', __dirname + '/app');
+
+// Serve static assets normally
 server.use(express.static(__dirname + '/public'));
 
-server.get('/', function(request, response) {
+// Direct all other routes to index.hbs, which includes JS to handle client
+// side routing
+server.get('*', function (request, response){
   var scriptPath = development ? 'bundle.js' : 'bundle.min.js';
   response.render('index', { jsFile: scriptPath });
 });
