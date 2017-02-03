@@ -3,4 +3,23 @@
 Code for the Python/Flask backend API server goes here.
 
 ## Virtual Environment
-`virtualenv env`
+Run the following commands to create virtual environment
+    
+    virtualenv env
+    source env/bin/activate
+    
+## Install Dependency
+    
+    pip install -e .
+    
+## Modules
+
+- [bin](bin) All executables
+- [relay_agent](relay_agent) Main entry point for API server
+- [tests](tests) Test cases go here
+
+## Run Server
+
+    ./bin/runserver.py
+    
+Currently, the main entry point is *localhost:5000/api/*

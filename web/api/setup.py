@@ -1,0 +1,22 @@
+#
+# (c) 2017, MediVision
+#
+# setup.py
+#
+
+from setuptools import setup
+
+setup(
+    name='mediserver',
+    version='0.0.1',
+    description="central server for video stream coordination",
+    author='han',
+    author_email='hazh@umich.edu',
+    test_suite='tests',
+    packages=[
+        'relay_agent',
+    ],
+    install_requires=[
+        'flask==0.12',
+    ]
+)
