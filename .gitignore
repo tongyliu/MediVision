@@ -17,8 +17,12 @@ node_modules
 # JetBrains IDE
 **/.idea
 
-# Virtualenv
+# Virtualenv & Vagrant
 **/env
+**/venv
+**/.vagrant
+**/requirements.txt
+**/Vagrantfile
 
 #Unity Stuff
 /[Ll]ibrary/
