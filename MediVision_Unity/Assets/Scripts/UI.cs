@@ -33,14 +33,17 @@ public class UI : MonoBehaviour
 
     string GetIP()
     {
-        string strHostName = "";
-        strHostName = System.Net.Dns.GetHostName();
+        return Network.player.ipAddress.ToString();
 
-        IPHostEntry ipEntry = System.Net.Dns.GetHostEntry(strHostName);
+        //string strHostName = "";
+        
+        //strHostName = Dns.GetHostName();
 
-        IPAddress[] addr = ipEntry.AddressList;
+        //IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
 
-        return addr[addr.Length - 1].ToString();
+        //IPAddress[] addr = ipEntry.AddressList;
+
+        //return addr[addr.Length - 1].ToString();
     }
 
     void colorRecordIndicator()
