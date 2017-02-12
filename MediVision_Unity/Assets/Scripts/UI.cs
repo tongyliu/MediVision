@@ -33,10 +33,12 @@ public class UI : MonoBehaviour
 
     string GetIP()
     {
-        return Network.player.ipAddress.ToString();
-
+        //return Network.player.ipAddress.ToString();
+        #if NETFX_CORE
+            return Windows.Networking.Connectivity.NetworkInformation.GetHostNames()[0].ToString();
+        #endif
         //string strHostName = "";
-        
+
         //strHostName = Dns.GetHostName();
 
         //IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
@@ -44,6 +46,7 @@ public class UI : MonoBehaviour
         //IPAddress[] addr = ipEntry.AddressList;
 
         //return addr[addr.Length - 1].ToString();
+        return "HELLO IP HERE";
     }
 
     void colorRecordIndicator()
