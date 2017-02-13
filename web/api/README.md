@@ -23,3 +23,20 @@ Run the following commands to create virtual environment
     ./bin/runserver.py
     
 Currently, the main entry point is *localhost:5000/api/*
+
+## API Documentation
+
+We will use [ApiDoc](http://apidocjs.com/) for API generations.
+
+Install it with
+
+    npm install apidoc -g
+    
+And then run the following 
+    
+    apidoc -i ./ -o apidoc/
+    
+And then you can view the API documentation page in `apidoc/index.html`
+Or by open
+
+    open apidoc/index.html

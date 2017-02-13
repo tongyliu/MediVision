@@ -10,7 +10,7 @@ misc_pages = Blueprint('misc_pages', __name__)
 @misc_pages.route('/', methods=['POST', 'GET'])
 def default_landing():
     """
-    @api {post, get} / Landing Page
+    @api {post, get} /api/ Landing Page
     @apiName LandingPage
     @apiGroup Default
 
