@@ -32,4 +32,4 @@ app.register_blueprint(stream_pages, url_prefix=api_prefix + '/stream')
 
 @socketio.on('send', namespace=socket_prefix)
 def handle_send(data):
-    emit(data['to'], data)
+    emit(data['to'], data, broadcast=True)
