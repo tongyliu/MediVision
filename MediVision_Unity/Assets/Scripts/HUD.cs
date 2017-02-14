@@ -30,7 +30,6 @@ public class HUD : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        colorRecordIndicator();
         if (captureOn() && Time.time - timeConnected > IPfadetimer)
         {
             IP_box.enabled = false;
@@ -48,20 +47,6 @@ public class HUD : MonoBehaviour
 
         #endif
         return "THIS DID NOT WORK";
-    }
-
-    void colorRecordIndicator()
-    {
-        //if connected, color red. Else, color grey.
-        if (captureOn())
-        {
-            recordIndicator.color = originalColor;
-            timeConnected = Time.time;
-        }
-        else
-        {
-            recordIndicator.color = Color.grey;
-        }
     }
 
     bool captureOn()
