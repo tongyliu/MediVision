@@ -19,5 +19,6 @@ setup(
     install_requires=[
         'flask==0.12',
         'flask-socketio==2.8.3',
+        'pyrebase==3.0.27',
     ]
 )

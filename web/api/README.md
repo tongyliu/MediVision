@@ -32,9 +32,9 @@ Install it with
 
     npm install apidoc -g
     
-And then run the following 
+And then run the following in this directory
     
-    apidoc -i ./ -o apidoc/
+    ./bin/generate_api.sh
     
 And then you can view the API documentation page in `apidoc/index.html`
 Or by open
