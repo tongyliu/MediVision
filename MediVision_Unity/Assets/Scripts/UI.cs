@@ -33,20 +33,18 @@ public class UI : MonoBehaviour
 
     string GetIP()
     {
-        //return Network.player.ipAddress.ToString();
+
         #if NETFX_CORE
-            return Windows.Networking.Connectivity.NetworkInformation.GetHostNames()[0].ToString();
+
+            System.Collections.Generic.IReadOnlyList<Windows.Networking.HostName> hostNames = 
+                Windows.Networking.Connectivity.NetworkInformation.GetHostNames();
+
+            return hostNames[hostNames.Count - 1].ToString();
+
         #endif
-        //string strHostName = "";
 
-        //strHostName = Dns.GetHostName();
+        return "THIS DID NOT WORK";
 
-        //IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
-
-        //IPAddress[] addr = ipEntry.AddressList;
-
-        //return addr[addr.Length - 1].ToString();
-        return "HELLO IP HERE";
     }
 
     void colorRecordIndicator()
