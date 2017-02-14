@@ -10,7 +10,7 @@ public class HUD : MonoBehaviour
     public Text IP_box;
     public Image recordIndicator;
 
-    public bool ___________________________;
+    bool ___________________________;
     //internal variables
     public Color originalColor;
 
@@ -33,17 +33,18 @@ public class HUD : MonoBehaviour
 
     string GetIP()
     {
-        //return Network.player.ipAddress.ToString();
-#if NETFX_CORE
-            return Windows.Networking.Connectivity.NetworkInformation.GetHostNames()[0].ToString();
-#else
-        return Network.player.ipAddress.ToString();
-#endif
-        //string strHostName = "";
-        //strHostName = Dns.GetHostName();
-        //IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
-        //IPAddress[] addr = ipEntry.AddressList;
-        //return addr[addr.Length - 1].ToString();
+
+        #if NETFX_CORE
+
+            System.Collections.Generic.IReadOnlyList<Windows.Networking.HostName> hostNames = 
+                Windows.Networking.Connectivity.NetworkInformation.GetHostNames();
+
+            return hostNames[hostNames.Count - 1].ToString();
+
+        #endif
+
+        return "THIS DID NOT WORK";
+
     }
 
     void colorRecordIndicator()
