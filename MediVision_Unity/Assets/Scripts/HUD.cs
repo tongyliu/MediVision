@@ -10,7 +10,7 @@ public class HUD : MonoBehaviour
     public Text IP_box;
     public Image recordIndicator;
 
-    bool ___________________________;
+    public bool ___________________________;
     //internal variables
     public Color originalColor;
 
@@ -29,11 +29,10 @@ public class HUD : MonoBehaviour
 	void Update ()
     {
         colorRecordIndicator();
-	}
+    }
 
     string GetIP()
     {
-
         #if NETFX_CORE
 
             System.Collections.Generic.IReadOnlyList<Windows.Networking.HostName> hostNames = 
@@ -42,15 +41,13 @@ public class HUD : MonoBehaviour
             return hostNames[hostNames.Count - 1].ToString();
 
         #endif
-
         return "THIS DID NOT WORK";
-
     }
 
     void colorRecordIndicator()
     {
         //if connected, color red. Else, color grey.
-        if (false) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (captureOn())
         {
             recordIndicator.color = originalColor;
         }
@@ -58,9 +55,15 @@ public class HUD : MonoBehaviour
         {
             recordIndicator.color = Color.grey;
         }
+    }
 
-
-
+    bool captureOn()
+    {
+        #if NETFX_CORE
+            Windows.Media.Capture.AppCapture current = Windows.Media.Capture.AppCapture.GetForCurrentView();
+            return current.IsCapturingVideo;
+        #endif
+        return false;
     }
 
 }
