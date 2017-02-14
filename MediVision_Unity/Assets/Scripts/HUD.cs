@@ -9,6 +9,8 @@ public class HUD : MonoBehaviour
     //inspector variables
     public Text IP_box;
     public Image recordIndicator;
+    public float IPfadetimer = 5f;
+    public float timeConnected = 0f;
 
     public bool ___________________________;
     //internal variables
@@ -29,6 +31,10 @@ public class HUD : MonoBehaviour
 	void Update ()
     {
         colorRecordIndicator();
+        if (captureOn() && Time.time - timeConnected > IPfadetimer)
+        {
+            IP_box.enabled = false;
+        }
     }
 
     string GetIP()
@@ -50,6 +56,7 @@ public class HUD : MonoBehaviour
         if (captureOn())
         {
             recordIndicator.color = originalColor;
+            timeConnected = Time.time;
         }
         else
         {
