@@ -330,12 +330,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 476718388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44dff55a334070b4d99da92388d95328, type: 3}
+  m_Script: {fileID: 11500000, guid: dd4333e6f284c4e4eb1c7257fe866c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IP_box: {fileID: 922501397}
   recordIndicator: {fileID: 1395277091}
-  ___________________________: 0
   originalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &922501396
 GameObject:
