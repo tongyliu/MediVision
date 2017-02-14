@@ -140,15 +140,17 @@ var ChildVideo = React.createClass({
     // Register event handler for when we receive the stream
     this.pc.onaddstream = function(evt) {
       this.refs.video.srcObject = evt.stream;
-    }
+    }.bind(this);
     // Register event handler to send ICE candidates to the parent
     this.pc.onicecandidate = function(evt) {
-      socket.emit('send', {
-        to: this.props.parentId,
-        type: 'icecandidate',
-        clientId: this.props.id,
-        data: evt.candidate
-      });
+      if (evt.candidate) {
+        socket.emit('send', {
+          to: this.props.parentId,
+          clientId: this.props.id,
+          type: 'icecandidate',
+          data: evt.candidate
+        });
+      }
     }.bind(this);
   },
 
@@ -158,6 +160,7 @@ var ChildVideo = React.createClass({
         this.pc.setLocalDescription(desc).catch(logError);
         socket.emit('send', {
           to: this.props.parentId,
+          clientId: this.props.id,
           type: 'desc',
           data: desc
         });
