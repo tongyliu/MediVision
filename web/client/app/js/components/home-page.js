@@ -5,6 +5,7 @@
  */
 
 var React = require('react');
+var ParentVideo = require('./webrtc-video').ParentVideo;
 
 var HomePage = React.createClass({
   render: function() {
@@ -13,15 +14,7 @@ var HomePage = React.createClass({
     return (
       <div className="home-page">
         <h1>Hello, World!</h1>
-        <video
-          id="my-video" className="video-js" width="320" height="480"
-          preload="auto" controls>
-          <source src={videoUrl} type='video/mp4'/>
-          <p className="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a web browser that
-            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-          </p>
-        </video>
+        <ParentVideo id="my-video" width="320px" height="480px" src={videoUrl}/>
       </div>
     );
   }
