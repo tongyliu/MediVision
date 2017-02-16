@@ -444,6 +444,7 @@ GameObject:
   - component: {fileID: 922501399}
   - component: {fileID: 922501398}
   - component: {fileID: 922501397}
+  - component: {fileID: 922501400}
   m_Layer: 5
   m_Name: IP_text
   m_TagString: Untagged
@@ -472,11 +473,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 50
+    m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 50
+    m_MaxSize: 70
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -506,8 +507,25 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 50, y: 0}
-  m_SizeDelta: {x: 500, y: 50}
+  m_SizeDelta: {x: 550, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &922501400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 922501396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4333e6f284c4e4eb1c7257fe866c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IP_box: {fileID: 922501397}
+  recordIndicator: {fileID: 0}
+  IPfadetimer: 5
+  timeConnected: 0
+  ___________________________: 0
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &976442468
 Prefab:
   m_ObjectHideFlags: 0
