@@ -2,6 +2,7 @@ import logging
 from sys import stdout
 
 from flask import Flask
+from flask.ext.cors import CORS
 from flask_socketio import SocketIO, emit
 
 from relay_agent.blueprints.default_controller import misc_pages
@@ -15,6 +16,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/stream*": {"origins": "*"}})
 socketio = SocketIO(app)
 
 api_prefix = '/api'
