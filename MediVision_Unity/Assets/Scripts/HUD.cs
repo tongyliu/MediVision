@@ -29,10 +29,7 @@ public class HUD : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (captureOn() && Time.time - timeConnected > IPfadetimer)
-        {
-            IP_box.enabled = false;
-        }
+        ip_fade();
     }
 
     string GetIP()
@@ -46,6 +43,22 @@ public class HUD : MonoBehaviour
 
         #endif
         return "THIS DID NOT WORK";
+    }
+
+    void ip_fade()
+    {
+        if (captureOn() && Time.time - timeConnected > IPfadetimer && IP_box.color.a > 0)
+        {
+            //IP_box.enabled = false;
+            Color c = IP_box.color;
+            c.a = c.a--;
+            IP_box.color = c;
+            if (IP_box.color.a < 0)
+            {
+                c.a = 0;
+                IP_box.color = c;
+            }
+        }
     }
 
     bool captureOn()
