@@ -8,7 +8,6 @@ public class HUD : MonoBehaviour
 {
     //inspector variables
     public Text IP_box;
-    public Image recordIndicator;
     public float IPfadetimer = 5f;
     public float timeConnected = 0f;
 
@@ -18,7 +17,7 @@ public class HUD : MonoBehaviour
 
     private void Awake()
     {
-        originalColor = recordIndicator.color;
+        
     }
 
     // Use this for initialization
