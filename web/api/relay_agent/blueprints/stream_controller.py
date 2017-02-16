@@ -38,7 +38,7 @@ def get_stream(stream_id):
     @apiName GetStreamId
     @apiGroup Stream
 
-    @apiParam {String} sream_id Stream ID to be retrieved
+    @apiParam {String} stream_id Stream ID to be retrieved
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {Number} client_id Indicate which client it is contacting this live stream
