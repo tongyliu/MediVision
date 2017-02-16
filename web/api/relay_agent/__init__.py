@@ -2,7 +2,7 @@ import logging
 from sys import stdout
 
 from flask import Flask
-from flask.ext.cors import CORS
+from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 from relay_agent.blueprints.default_controller import misc_pages
