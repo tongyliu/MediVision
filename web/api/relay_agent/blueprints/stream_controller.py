@@ -27,7 +27,7 @@ def create_stream():
     @apiDescription This endpoint accepts request to create new stream
     """
     stream_id = id_generator()
-    streams[stream_id] = datetime.utcnow()
+    streams[stream_id] = 0
     return jsonify({'success': True, 'stream_id': stream_id})
 
 
@@ -41,12 +41,15 @@ def get_stream(stream_id):
     @apiParam {String} sream_id Stream ID to be retrieved
 
     @apiSuccess {Boolean} success Indicate whether this request success
+    @apiSuccess {Number} client_id Indicate which client it is contacting this live stream
 
     @apiDescription This endpoint returns information about requested stream
     """
     res = {'success': False}
     if stream_id in streams:
         res['success'] = True
+        res['client_id'] = streams[stream_id]
+        streams[stream_id] += 1
     return jsonify(res)
 
 
