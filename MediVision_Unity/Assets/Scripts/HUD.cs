@@ -8,12 +8,17 @@ public class HUD : MonoBehaviour
 {
     //inspector variables
     public Text IP_box;
-    public float IPfadetimer = 5f;
-    public float timeConnected = 0f;
+    public float IP_Fade_Delay = 3f;
+    public float IP_Fade_Speed = .01f;
+    public bool debug_capture_on = false;
+    public string disconnectionMessage = "Stream Disconnected";
 
     public bool ___________________________;
-    //internal variables
-    public Color originalColor;
+    //internal variables    
+    float timeConnected = 0f;
+    bool fadeReset = false;
+    Color original_IP_text_color;
+    bool streamStarted = false;
 
     private void Awake()
     {
@@ -24,12 +29,15 @@ public class HUD : MonoBehaviour
     void Start ()
     {
         IP_box.text = "IP:" + GetIP();
+        original_IP_text_color = Color.white;
+        original_IP_text_color.a = 1;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         ip_fade();
+        checkConnection();
     }
 
     string GetIP()
@@ -47,11 +55,10 @@ public class HUD : MonoBehaviour
 
     void ip_fade()
     {
-        if (captureOn() && Time.time - timeConnected > IPfadetimer && IP_box.color.a > 0)
+        if (captureOn() && Time.time - timeConnected > IP_Fade_Delay && IP_box.color.a > 0)
         {
-            //IP_box.enabled = false;
             Color c = IP_box.color;
-            c.a = c.a--;
+            c.a = c.a - IP_Fade_Speed;
             IP_box.color = c;
             if (IP_box.color.a < 0)
             {
@@ -59,15 +66,42 @@ public class HUD : MonoBehaviour
                 IP_box.color = c;
             }
         }
+        if (!fadeReset && IP_box.color.a == 0)
+        {
+            IP_box.color = original_IP_text_color;
+            fadeReset = true;
+            IP_box.enabled = false;
+        }
     }
 
     bool captureOn()
     {
+        if (debug_capture_on)
+        {
+            streamStarted = true;
+            return true;
+        }
         #if NETFX_CORE
             Windows.Media.Capture.AppCapture current = Windows.Media.Capture.AppCapture.GetForCurrentView();
-            return current.IsCapturingVideo;
+            if (current.IsCapturingVideo)
+            {
+                streamStarted = true;
+                return true;
+            }
         #endif
         return false;
+    }
+
+    void checkConnection()
+    {
+        if (streamStarted && !captureOn()) //if connection lost
+        {
+            IP_box.enabled = true;
+            IP_box.text = disconnectionMessage;
+            original_IP_text_color.a = 1;
+            IP_box.color = original_IP_text_color;
+            streamStarted = false;
+        }
     }
 
 }
