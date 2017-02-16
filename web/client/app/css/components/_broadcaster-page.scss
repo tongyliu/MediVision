@@ -1,3 +1,16 @@
 .broadcaster-page {
 	color: $green;
 }
+
+.ip-form {
+	margin: 40px;
+
+	label {
+		display: block;
+		margin-bottom: 5px;
+	}
+
+	input {
+		font-size: 1.5em;
+	}
+}
