@@ -98,6 +98,9 @@ public class HUD : MonoBehaviour
         {
             IP_box.enabled = true;
             IP_box.text = disconnectionMessage;
+            original_IP_text_color.a = 1;
+            IP_box.color = original_IP_text_color;
+            streamStarted = false;
         }
     }
 
