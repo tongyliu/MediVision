@@ -17,7 +17,7 @@ streams = {}
 @stream_pages.route('/', methods=['POST'])
 def create_stream():
     """
-    @api {post} /api/stream/ Create Stream
+    @api {post} /stream/ Create Stream
     @apiName PostStream
     @apiGroup Stream
 
@@ -34,7 +34,7 @@ def create_stream():
 @stream_pages.route('/<stream_id>', methods=['GET'])
 def get_stream(stream_id):
     """
-    @api {get} /api/stream/:stream_id Get Stream
+    @api {get} /stream/:stream_id Get Stream
     @apiName GetStreamId
     @apiGroup Stream
 
@@ -56,7 +56,7 @@ def get_stream(stream_id):
 @stream_pages.route('/', methods=['GET'])
 def get_all_streams():
     """
-    @api {get} /api/stream/ Get All Streams
+    @api {get} /stream/ Get All Streams
     @apiName GetStream
     @apiGroup Stream
 

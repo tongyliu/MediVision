@@ -1,0 +1,11 @@
+{
+  "name": "MediVision-API Server",
+  "version": "0.0.1",
+  "description": "API endpoints for centralized management server",
+  "title": "MediVision APIs",
+  "url": "http://localhost:5000/api",
+  "order": [
+    "Group",
+    "Default"
+  ]
+}

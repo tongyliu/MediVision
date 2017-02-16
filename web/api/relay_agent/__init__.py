@@ -25,11 +25,6 @@ app.register_blueprint(stream_pages, url_prefix=api_prefix + '/stream')
 
 
 # TODO: Refactor these decorators to separate file
-# @socketio.on('register', namespace=socket_prefix)
-# def handle_register(data):
-#     emit('my response', {'data': 'Registered'})
-
-
 @socketio.on('send', namespace=socket_prefix)
 def handle_send(data):
     emit(data['to'], data, broadcast=True)
