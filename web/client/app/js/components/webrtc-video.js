@@ -75,13 +75,19 @@ var ParentVideo = React.createClass({
   },
 
   _createStreamIfNeeded: function() {
-    if (!this.stream) {
+    if (!this.stream || !this.stream.active) {
       if (this.refs.video.captureStream) {
         this.stream = this.refs.video.captureStream();
       } else if (this.refs.video.mozCaptureStream) {
         this.stream = this.refs.video.mozCaptureStream();
       } else {
         console.warn('captureStream() not supported');
+      }
+      if (!this.stream.active) {
+        // Try again after a second if the stream is not active yet (i.e. the
+        // video has not finished loading)
+        console.warn('Stream not active yet, will retry later');
+        setTimeout(this._createStreamIfNeeded, 1000);
       }
     }
   },
