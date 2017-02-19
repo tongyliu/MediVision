@@ -8,7 +8,7 @@ var React = require('react');
 var request = require('request');
 var io = require('socket.io-client');
 var _ = require('lodash');
-var config = require('../config.js');
+var config = require('../config');
 
 var socket = io.connect(config.SOCKET_URL);
 var r = request.defaults({ baseUrl: config.API_URL, json: true });
@@ -36,7 +36,9 @@ var ParentVideo = React.createClass({
           <source src={this.props.src} type="video/mp4"/>
           <p className="vjs-no-js">Unsupported Browser</p>
         </video>
-        <button onClick={this._publishStream} disabled={buttonDisabled}>
+        <button
+          className="btn btn-lg btn-success" role="button"
+          onClick={this._publishStream} disabled={buttonDisabled}>
           Start Streaming
         </button>
       </div>
@@ -150,10 +152,13 @@ var ParentVideo = React.createClass({
 var ChildVideo = React.createClass({
   render: function() {
     var vidProps = _.pick(this.props, allowedVideoProps);
+    vidProps.autoPlay = vidProps.controls = true;
     return (
-      <video {...vidProps} ref="video" className="video-js" autoPlay controls>
-        <p className="vjs-no-js">Unsupported Browser</p>
-      </video>
+      <div className='child-video'>
+        <video {...vidProps} ref="video" className="video-js">
+          <p className="vjs-no-js">Unsupported Browser</p>
+        </video>
+      </div>
     );
   },
 

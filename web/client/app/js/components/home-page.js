@@ -5,16 +5,31 @@
  */
 
 var React = require('react');
-var ParentVideo = require('./webrtc-video').ParentVideo;
+var Link = require('react-router').Link;
+var TopBar = require('./top-bar');
 
 var HomePage = React.createClass({
   render: function() {
-    // TODO: Replace with actual homepage design
-    var videoUrl = 'oceans.mp4';
     return (
       <div className="home-page">
-        <h1>Hello, World!</h1>
-        <ParentVideo id="my-video" width="320px" height="480px" src={videoUrl}/>
+        <TopBar />
+        <div className="jumbotron">
+          <h1>MediVision</h1>
+          <p className="lead">
+            Better medical training through real-time video streaming.
+            MediVision allows students and residents to learn from real-world
+            cases as they happen, without having to physically be in a
+            hospital.
+          </p>
+          <nav>
+            <Link to="/broadcast" className="btn btn-lg btn-primary">
+              Start a Stream
+            </Link>
+            <Link to="/streams" className="btn btn-lg btn-primary">
+              Browse Streams
+            </Link>
+          </nav>
+        </div>
       </div>
     );
   }

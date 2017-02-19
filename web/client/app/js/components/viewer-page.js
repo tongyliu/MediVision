@@ -5,6 +5,7 @@
  */
 
 var React = require('react');
+var TopBar = require('./top-bar');
 var ChildVideo = require('./webrtc-video').ChildVideo;
 var request = require('request');
 var config = require('../config');
@@ -27,7 +28,7 @@ var ViewerPage = React.createClass({
 
     return (
       <div className="viewer-page">
-        <h1>View Stream</h1>
+        <TopBar />
         {comp}
       </div>
     );

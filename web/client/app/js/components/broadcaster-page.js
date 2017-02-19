@@ -5,6 +5,7 @@
  */
 
 var React = require('react');
+var TopBar = require('./top-bar');
 var ParentVideo = require('./webrtc-video').ParentVideo;
 var Address4 = require('ip-address').Address4;
 var qs = require('qs');
@@ -16,13 +17,20 @@ var IpForm = React.createClass({
 
   render: function() {
     return (
-      <form className="ip-form" onSubmit={this._handleSubmit}>
-        <label htmlFor="ip-input">Enter HoloLens IP Address</label>
-        <input
-          id="ip-input" type="text"
-          onChange={this._onChange} value={this.state.ip}
-        />
-      </form>
+      <div className="ip-form panel panel-default">
+        <div className="panel-body">
+          <form onSubmit={this._handleSubmit}>
+            <label htmlFor="ip-input">Enter HoloLens IP Address</label>
+            <input
+              id="ip-input" type="text"
+              onChange={this._onChange} value={this.state.ip}
+            />
+            <button className="btn btn-lg btn-success">
+              Next
+            </button>
+          </form>
+        </div>
+      </div>
     );
   },
 
@@ -62,7 +70,7 @@ var BroadcasterPage = React.createClass({
 
     return (
       <div className="broadcaster-page">
-        <h1>Start a Stream</h1>
+        <TopBar />
         {pageComponent}
       </div>
     );
