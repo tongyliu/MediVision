@@ -1,3 +1,22 @@
 .streams-page {
-	color: $blue;
+	max-width: 800px;
+	padding: 20px;
+	margin: 0 auto;
+
+	.stream-list {
+		margin-top: 40px;
+
+		.no-stream-msg {
+			text-align: center;
+			font-size: 1.4em;
+		}
+
+		.btn {
+			margin-bottom: 10px;
+		}
+
+		.text-muted {
+			font-style: italic;
+		}
+	}
 }

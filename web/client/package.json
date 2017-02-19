@@ -4,6 +4,7 @@
   "license": "private",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.5",
     "express": "^4.14.1",
     "express-handlebars": "^3.0.0",
     "ip-address": "^5.8.6",
