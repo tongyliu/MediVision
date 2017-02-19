@@ -5,15 +5,75 @@
  */
 
 var React = require('react');
+var Link = require('react-router').Link;
+var TopBar = require('./top-bar');
+var classNames = require('classnames');
+var request = require('request');
+var config = require('../config');
+
+var r = request.defaults({ baseUrl: config.API_URL, json: true });
 
 var StreamsPage = React.createClass({
+  getInitialState: function() {
+    return { streams: [] };
+  },
+
   render: function() {
-    // TODO: Replace with actual page design
+    var streamComponents = this.state.streams.map(function(stream) {
+      // Temporary workaround to handle streams that are received as just
+      // an ID and not an object
+      if (typeof stream == 'string') {
+        stream = { stream_id: stream };
+      }
+
+      return (
+        <div key={stream['stream_id']} className="col-sm-6 col-md-4">
+          <div className="thumbnail">
+            <div className="caption">
+              <h3>{stream['stream_id']}</h3>
+              <p className={classNames({
+                'text-muted': !stream['desc']
+              })}>
+                {stream['desc'] || 'No description provided'}
+              </p>
+              <Link
+                to={'/view-stream?stream_id=' + stream['stream_id']}
+                className="btn btn-success">
+                View
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    });
+
+    if (!streamComponents.length) {
+      streamComponents = (
+        <h3 className="no-stream-msg text-muted">
+          No streams available.
+        </h3>
+      );
+    }
+
     return (
       <div className="streams-page">
+        <TopBar />
         <h1>Browse Available Streams</h1>
+        <div className="row stream-list">
+          {streamComponents}
+        </div>
       </div>
     );
+  },
+
+  componentDidMount: function() {
+    r.get('/stream/', function(err, res, body) {
+      if (!err && res.statusCode == 200 && body['success']) {
+        this.setState({ streams: body['active_streams'] });
+      } else {
+        console.warn('API request returned error');
+      }
+    }.bind(this));
   }
 });
 
