@@ -88,7 +88,7 @@ var BroadcasterPage = React.createClass({
       mic: true,
       loopback: false
     });
-    return baseUrl + '/api/holographic/stream/live_high.mp4' + queryString;
+    return baseUrl + '/api/holographic/stream/live_high.mp4?' + queryString;
   }
 });
 
