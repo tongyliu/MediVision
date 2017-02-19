@@ -40,3 +40,13 @@ And then you can view the API documentation page in `apidoc/index.html`
 Or by open
 
     open apidoc/index.html
+
+## Deployment
+
+The server instance is deployed on 
+[Amazon EC2](https://aws.amazon.com/ec2/) via the utilization 
+of [Docker](http://docker.com/). 
+
+The current address of the running server instance is 
+http://34.198.160.73/ (Only accessible though U-M networks) and
+you can verify it's up by visiting http://34.198.160.73/api/ .
