@@ -52,5 +52,38 @@ public class Message : MonoBehaviour
         }
     }
 
+    int calcMsgLen(string msg)
+    {
+        int len = 0;
+
+        Font myFont = msgText.font;
+        CharacterInfo characterInfo = new CharacterInfo();
+
+        char[] arr = msg.ToCharArray();
+        foreach (char c in arr)
+        {
+            myFont.GetCharacterInfo(c, out characterInfo, msgText.fontSize);
+
+            len += characterInfo.advance;
+        }
+        return len;
+    }
+
+    int calcLines(string msg)
+    {
+
+
+
+        calcMsgLen(msg);
+
+
+
+
+
+
+        return 0;
+    }
+
+
 
 }

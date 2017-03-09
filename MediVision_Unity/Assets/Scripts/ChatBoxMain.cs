@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ChatBoxMain : MonoBehaviour
 {
     ContentSizeFitter csf;
-    public Text msgText;
-
+    public GameObject msgPrefab;
+    public Transform msgParentPanel;
 
 
 	// Use this for initialization
@@ -21,18 +21,16 @@ public class ChatBoxMain : MonoBehaviour
 		
 	}
 
-    public void showMessage(string msg)
+    public void setMessage(string msg)
     {
-        msgText.text = msg;
+        if (msg == "") return;
+        GameObject msgClone = Instantiate(msgPrefab);
+        msgClone.transform.SetParent(msgParentPanel);
+        msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 2);
+        msgClone.GetComponent<Message>().showMessage(msg);
     }
 
-    //destroys gameobject after set amount of time
-    public void msgFader()
-    {
-
-    }
-
-
+    
 
 
 
