@@ -1,0 +1,28 @@
+.chat-box {
+	width: 300px;
+	height: 400px;
+	position: relative;
+
+	$header-height: 40px;
+	$footer-height: 54px;
+
+	.panel-heading {
+		height: $header-height;
+	}
+
+	.panel-body {
+		position: absolute;
+		top: $header-height;
+		bottom: $footer-height;
+		width: 100%;
+		overflow: auto;
+		padding: 0;
+	}
+
+	.panel-footer {
+		position: absolute;
+		bottom: 0;
+		height: $footer-height;
+		width: 100%;
+	}
+}
