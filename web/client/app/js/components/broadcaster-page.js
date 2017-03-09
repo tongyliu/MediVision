@@ -81,7 +81,7 @@ var BroadcasterPage = React.createClass({
   },
 
   _generateVideoUrl: function() {
-    var baseUrl = 'https://' + this.state.holoLensIp;
+    var baseUrl = 'http://' + this.state.holoLensIp;
     var queryString = qs.stringify({
       holo: false,
       pv: true,
