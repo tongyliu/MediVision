@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SocketIO;
 
 public class ChatBoxMain : MonoBehaviour
 {
-    ContentSizeFitter csf;
+    public string serverBaseURL = "";
     public GameObject msgPrefab;
     public Transform msgParentPanel;
 
+    GameObject socket_io;
+    SocketIOComponent socket;
 
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start ()
     {
-        csf = gameObject.GetComponent<ContentSizeFitter>();
-	}
+        socket_io = GameObject.Find("SocketIO");
+        socket = socket_io.GetComponent<SocketIOComponent>();
+        socket.url = getURL();
+        socket.Connect();
+    }
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+        chatListen();
 	}
 
     public void setMessage(string msg)
@@ -30,8 +38,33 @@ public class ChatBoxMain : MonoBehaviour
         msgClone.GetComponent<Message>().showMessage(msg);
     }
 
-    
+    public string getURL()
+    {
+        return serverBaseURL + requestStreamIdentifier();
+    }
 
+    string requestStreamIdentifier()
+    {
+        //TODO once API is done
+
+        return "";
+    }
+
+    //listen for and display incoming messages
+    void chatListen()
+    {
+        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        socket.On("message", readmessage);
+
+    }
+
+    //called when a new message is received
+    void readmessage(SocketIOEvent e)
+    {
+        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
+        //string msg = e.data;
+    }
 
 
 }
