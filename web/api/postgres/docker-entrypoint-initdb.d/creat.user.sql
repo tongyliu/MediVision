@@ -1,0 +1,4 @@
+CREATE USER python WITH PASSWORD 'python';
+CREATE DATABASE medivision;
+GRANT ALL PRIVILEGES ON DATABASE medivision to python;
+ALTER USER python WITH SUPERUSER;

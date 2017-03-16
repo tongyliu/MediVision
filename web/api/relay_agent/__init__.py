@@ -30,3 +30,10 @@ app.register_blueprint(stream_pages, url_prefix=api_prefix + '/stream')
 @socketio.on('send', namespace=socket_prefix)
 def handle_send(data):
     emit(data['to'], data, broadcast=True)
+
+
+@socketio.on('chat', namespace=socket_prefix)
+def handle_chat(data):
+    # Store in DB
+    emit(data['to'], data, broadcast=True)
+

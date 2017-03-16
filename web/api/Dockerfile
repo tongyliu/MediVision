@@ -10,7 +10,8 @@ ENTRYPOINT ["/app/bin/runserver.py"]
 # Copy all project files
 COPY tests /app/tests
 COPY bin /app/bin
-COPY setup.py utils.py /app/
+COPY setup.py /app/
+COPY utils /app/utils
 COPY relay_agent /app/relay_agent
 
 # Install dependency
