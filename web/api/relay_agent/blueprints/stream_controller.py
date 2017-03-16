@@ -87,7 +87,7 @@ def get_all_streams():
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {String[]} active_streams A list of active stream IDs
-    @apiSuccess {String[]) active_names A list of active stream names
+    @apiSuccess {String[]} active_names A list of active stream names
 
     @apiDescription This endpoint returns a list of currently active streams with their IDs
     """
