@@ -7,12 +7,16 @@ using SocketIO;
 public class ChatBoxMain : MonoBehaviour
 {
     public string serverBaseURL = ""; //UPDATE WITH SERVER URL
+    public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
+    public float checkConnectionDelay = 5; //seconds
     public GameObject msgPrefab;
     public Transform msgParentPanel;
-    public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
+    public Text titleText;
 
-     GameObject socket_io;
+    GameObject socket_io;
     SocketIOComponent socket;
+    float timeOfLastCheck = 0;
+    
 
 
     // Use this for initialization
@@ -28,7 +32,8 @@ public class ChatBoxMain : MonoBehaviour
 	void Update ()
     {
         chatListen();
-	}
+        chatConnected();
+    }
 
     public void setMessage(string msg)
     {
@@ -54,18 +59,34 @@ public class ChatBoxMain : MonoBehaviour
     //listen for and display incoming messages
     void chatListen()
     {
-        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         socket.On("message", readmessage);
-
     }
 
     //called when a new message is received
     void readmessage(SocketIOEvent e)
     {
-        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
         string msg = e.data.ToDictionary()["message"];
         setMessage(msg);
+    }
+
+    bool chatConnected()
+    {
+        if (Time.time - timeOfLastCheck > checkConnectionDelay)
+        {
+            timeOfLastCheck = Time.time;
+            if (socket.IsConnected)
+            {
+                titleText.text = "Viewer Chat";
+                return true;
+            }
+            else
+            {
+                titleText.text = "Chat Disconnected";
+                return false;
+            }
+        }
+        return true;        
     }
 
 

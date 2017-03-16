@@ -409,12 +409,12 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 127.9
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -29
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -434,7 +434,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -444,7 +444,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -459,22 +459,22 @@ Prefab:
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 125.9
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -661,9 +661,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverBaseURL: 
+  urlSuffix: socket.io/?EIO=4&transport=websocket
+  checkConnectionDelay: 5
   msgPrefab: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
   msgParentPanel: {fileID: 975295870}
-  urlSuffix: 
+  titleText: {fileID: 1336652235}
 --- !u!114 &975295874
 MonoBehaviour:
   m_ObjectHideFlags: 0
