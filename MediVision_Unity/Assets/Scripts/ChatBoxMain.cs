@@ -9,8 +9,9 @@ public class ChatBoxMain : MonoBehaviour
     public string serverBaseURL = ""; //UPDATE WITH SERVER URL
     public GameObject msgPrefab;
     public Transform msgParentPanel;
+    public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
 
-    GameObject socket_io;
+     GameObject socket_io;
     SocketIOComponent socket;
 
 
@@ -40,7 +41,7 @@ public class ChatBoxMain : MonoBehaviour
 
     public string getURL()
     {
-        return serverBaseURL + requestStreamIdentifier();
+        return serverBaseURL + requestStreamIdentifier() + urlSuffix;
     }
 
     string requestStreamIdentifier()
@@ -64,15 +65,7 @@ public class ChatBoxMain : MonoBehaviour
         //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
         string msg = e.data.ToDictionary()["message"];
-
-    }
-
-    void createMessageText(string s)
-    {
-        GameObject msg = Instantiate(msgPrefab);
-        msg.transform.SetParent(msgParentPanel.transform);
-
-
+        setMessage(msg);
     }
 
 
