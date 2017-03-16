@@ -59,10 +59,18 @@ var ChatBox = React.createClass({
     );
   },
 
+  componentDidMount: function() {
+    socket.on(this.props.roomId, this._receiveMsg);
+  },
+
   componentDidUpdate: function(prevProps, prevState) {
     // Scroll to last message
     var endNode = ReactDOM.findDOMNode(this.refs.messagesEnd);
     endNode.scrollIntoView({ behavior: 'smooth' });
+  },
+
+  _receiveMsg: function(msg) {
+    this.setState({ messages: this.state.messages.concat([msg]) });
   },
 
   _onChange: function(evt) {
@@ -72,15 +80,12 @@ var ChatBox = React.createClass({
   _handleSubmit: function(evt) {
     evt.preventDefault();
 
-    var newMsg = {
-      text: this.state.currentMessage,
-      id: this.state.messages.length
-    };
-
-    this.setState({
-      messages: this.state.messages.concat([newMsg]),
-      currentMessage: ''
+    socket.emit('chat', {
+      to: this.props.roomId,
+      text: this.state.currentMessage
     });
+
+    this.setState({ currentMessage: '' })
   }
 });
 
