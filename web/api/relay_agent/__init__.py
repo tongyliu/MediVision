@@ -7,6 +7,8 @@ from flask_socketio import SocketIO, emit
 
 from relay_agent.blueprints.default_controller import misc_pages
 from relay_agent.blueprints.stream_controller import stream_pages
+from utils.db_driver import get_cursor, fin
+from utils.utils import id_generator
 
 logging.basicConfig(
     level=logging.INFO,
@@ -33,7 +35,21 @@ def handle_send(data):
 
 
 @socketio.on('chat', namespace=socket_prefix)
-def handle_chat(data):
+def handle_chat(msg):
+    """Incoming message format:
+        - to:
+        - text:
+        - id:
+    """
     # Store in DB
-    emit(data['to'], data, broadcast=True)
+    logging.info('Receive chat message: {to: %s, text: %s}' % (msg['to'], msg['text']))
+    msg_id = id_generator()
+    msg['id'] = str(msg_id)
 
+    stmt = 'INSERT INTO chat (id, stream_id, content) VALUES (%s, %s, %s);'
+    data = (str(msg_id), msg['to'], msg['text'])
+    conn, cur = get_cursor()
+    cur.execute(stmt, data)
+    fin(conn, cur)
+
+    emit(msg['to'], msg, broadcast=True)

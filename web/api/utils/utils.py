@@ -3,7 +3,7 @@ import uuid
 
 import os
 
-debug_counter = 0x0
+debug_counter = 0x1
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):

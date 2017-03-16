@@ -6,7 +6,7 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify, request
 
-from utils.db_driver import *
+from utils.db_driver import get_cursor, fin
 from utils.utils import id_generator
 
 stream_pages = Blueprint('stream_pages', __name__)
