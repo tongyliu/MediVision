@@ -6,7 +6,7 @@ using SocketIO;
 
 public class ChatBoxMain : MonoBehaviour
 {
-    public string serverBaseURL = "";
+    public string serverBaseURL = ""; //UPDATE WITH SERVER URL
     public GameObject msgPrefab;
     public Transform msgParentPanel;
 
@@ -63,8 +63,18 @@ public class ChatBoxMain : MonoBehaviour
     {
         //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-        //string msg = e.data;
+        string msg = e.data.ToDictionary()["message"];
+
     }
+
+    void createMessageText(string s)
+    {
+        GameObject msg = Instantiate(msgPrefab);
+        msg.transform.SetParent(msgParentPanel.transform);
+
+
+    }
+
 
 
 }
