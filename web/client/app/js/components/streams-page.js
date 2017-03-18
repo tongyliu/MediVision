@@ -6,7 +6,6 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
-var TopBar = require('./top-bar');
 var classNames = require('classnames');
 var request = require('request');
 var config = require('../config');
@@ -28,7 +27,7 @@ var StreamsPage = React.createClass({
 
       return (
         <div key={stream['stream_id']} className="col-sm-6 col-md-4">
-          <div className="thumbnail">
+          <div className="thumbnail no-border">
             <div className="caption">
               <h3>{stream['stream_id']}</h3>
               <p className={classNames({
@@ -57,7 +56,6 @@ var StreamsPage = React.createClass({
 
     return (
       <div className="streams-page">
-        <TopBar />
         <h1>Browse Available Streams</h1>
         <div className="row stream-list">
           {streamComponents}

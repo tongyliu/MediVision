@@ -6,14 +6,12 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
-var TopBar = require('./top-bar');
 
 var HomePage = React.createClass({
   render: function() {
     return (
       <div className="home-page">
-        <TopBar />
-        <div className="jumbotron">
+        <div className="jumbotron no-border">
           <h1>MediVision</h1>
           <p className="lead">
             Better medical training through real-time video streaming.

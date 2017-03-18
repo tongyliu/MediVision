@@ -1,9 +1,21 @@
 .top-bar {
-	margin-bottom: 40px;
+	$top-bar-height: 56px;
+
+	height: $top-bar-height;
 	border-bottom: 1px solid $grey;
 	text-align: left;
+	background-color: $white;
+	box-shadow: 0 0 25px $shadow-color;
 
 	a, a:hover {
 		text-decoration: none;
+	}
+
+	h3 {
+		margin: 0;
+		line-height: $top-bar-height;
+		position: absolute;
+		left: 20px;
+		font-size: 20px;
 	}
 }

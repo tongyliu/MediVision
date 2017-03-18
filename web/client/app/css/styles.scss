@@ -1,6 +1,13 @@
 @import 'values';
+@import 'mixins';
 @import 'components/all';
 
 body {
 	font-family: $base-font;
+	background-color: $off-white;
+}
+
+.no-border {
+	@include shadow;
+	border: none;
 }
