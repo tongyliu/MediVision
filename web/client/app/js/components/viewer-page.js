@@ -6,6 +6,8 @@
 
 var React = require('react');
 var ChildVideo = require('./webrtc-video').ChildVideo;
+var ChatBox = require('./chat-box');
+var classNames = require('classnames');
 var request = require('request');
 var config = require('../config');
 
@@ -19,10 +21,36 @@ var ViewerPage = React.createClass({
 
   render: function() {
     var comp = null;
-    if (this.state.id !== undefined) {
-      comp = <ChildVideo id={this.state.id} parentId={this.state.parentId}/>;
-    } else {
+
+    // Create dummy stream object for now
+    var stream = { 'title': this.state.parentId };
+    // And dummy chat room ID
+    var chatRoom = 'foo';
+
+    if (this.state.id == -1) {
       comp = <h3>Stream Unavailable</h3>;
+    } else if (this.state.id !== undefined) {
+      comp = (
+        <div className="row">
+          <div className="col col-md-8">
+            <ChildVideo id={this.state.id} parentId={this.state.parentId}/>
+            <div className="video-desc panel no-border">
+              <h3>{stream['title']}</h3>
+              <p className={classNames({
+                'text-muted': !stream['desc']
+              })}>
+                {stream['desc'] || 'No description provided'}
+              </p>
+            </div>
+          </div>
+          <div className="col-md-4 col-sm-6">
+            <ChatBox title="Doctor Chat" roomId={chatRoom}/>
+          </div>
+          <div className="col-md-4 col-sm-6">
+            <ChatBox title="Viewer Chat" roomId={chatRoom}/>
+          </div>
+        </div>
+      );
     }
 
     return (
@@ -44,6 +72,7 @@ var ViewerPage = React.createClass({
         this.setState({ id: body['client_id'] });
       } else {
         console.warn('API request returned error');
+        this.setState({ id: -1 });
       }
     }.bind(this));
   }

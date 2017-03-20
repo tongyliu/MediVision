@@ -14,11 +14,8 @@
 }
 
 .child-video {
-	margin: 40px;
-	text-align: center;
-
 	video {
-		max-width: 640px;
-		max-height: 360px;
+		width: 100%;
+		background-color: black;
 	}
 }

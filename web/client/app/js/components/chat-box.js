@@ -34,7 +34,7 @@ var ChatBox = React.createClass({
     messages.push(<div ref='messagesEnd' key='messagesEnd'></div>);
 
     return (
-      <div className="chat-box panel panel-primary">
+      <div className="chat-box panel no-border">
         <div className="panel-heading">
           <h3 className="panel-title">{this.props.title}</h3>
         </div>
@@ -65,8 +65,10 @@ var ChatBox = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     // Scroll to last message
-    var endNode = ReactDOM.findDOMNode(this.refs.messagesEnd);
-    endNode.scrollIntoView({ behavior: 'smooth' });
+    if (prevState.messages.length != this.state.messages.length) {
+      var endNode = ReactDOM.findDOMNode(this.refs.messagesEnd);
+      endNode.scrollIntoView({ behavior: 'smooth' });
+    }
   },
 
   _receiveMsg: function(msg) {
