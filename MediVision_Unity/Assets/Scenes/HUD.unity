@@ -409,12 +409,12 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 127.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -29
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -434,7 +434,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -444,7 +444,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -459,22 +459,22 @@ Prefab:
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 125.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e95658e5bfd2ad4fad11e591291c2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverBaseURL: 
+  serverURL: ws://34.198.160.73/api/socket/
   urlSuffix: socket.io/?EIO=4&transport=websocket
   checkConnectionDelay: 5
   msgPrefab: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
@@ -855,6 +855,10 @@ Prefab:
     - target: {fileID: 400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 2}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 2}
+      propertyPath: url
+      value: ws://34.198.160.73/socket.io/?EIO=3&transport=websocket
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 2}
