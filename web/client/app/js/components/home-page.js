@@ -6,6 +6,7 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
+var LoginManager = require('../login-manager');
 
 var HomePage = React.createClass({
   render: function() {
@@ -30,6 +31,12 @@ var HomePage = React.createClass({
         </div>
       </div>
     );
+  },
+
+  componentDidMount: function() {
+    // This prevents us from redirecting to the wrong page if a user
+    // returns to the home page from the login or register page
+    LoginManager.clearRedirectUrl();
   }
 });
 

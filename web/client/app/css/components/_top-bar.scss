@@ -6,16 +6,34 @@
 	text-align: left;
 	background-color: $white;
 	box-shadow: 0 0 25px $shadow-color;
+	position: relative;
 
 	a, a:hover {
 		text-decoration: none;
 	}
 
-	h3 {
+	.logo {
 		margin: 0;
 		line-height: $top-bar-height;
 		position: absolute;
 		left: 20px;
 		font-size: 20px;
+	}
+
+	&__right-side {
+		position: absolute;
+		right: 10px;
+		height: 100%;
+		line-height: $top-bar-height;
+
+		.welcome-msg {
+			display: inline-block;
+			margin: 0 18px;
+			font-style: italic;
+		}
+
+		.btn {
+			margin: -3px 10px 0 0;
+		}
 	}
 }
