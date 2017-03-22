@@ -45,9 +45,11 @@ def handle_chat(msg):
     logging.info('Receive chat message: {to: %s, text: %s}' % (msg['to'], msg['text']))
     msg_id = id_generator()
     msg['id'] = str(msg_id)
+    stream_id = msg['to'][:36]
+    viewer_chat = 'viewer' in msg['to']
 
-    stmt = 'INSERT INTO chat (id, stream_id, content) VALUES (%s, %s, %s);'
-    data = (str(msg_id), msg['to'], msg['text'])
+    stmt = 'INSERT INTO chat (id, stream_id, content, viewer_chat) VALUES (%s, %s, %s, %s);'
+    data = (str(msg_id), stream_id, msg['text'], viewer_chat)
     conn, cur = get_cursor()
     cur.execute(stmt, data)
     fin(conn, cur)

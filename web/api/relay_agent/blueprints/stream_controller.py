@@ -20,20 +20,23 @@ def create_stream():
     @apiGroup Stream
 
     @apiParam {String} stream_name Name of the new stream
+    @apiParam {String} stream_description Detailed description of the new stream
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {String} stream_id Newly generated stream ID for this stream
 
     @apiDescription This endpoint accepts request to create new stream
     """
-    stream_name = request.form.get('stream_name', '')
+    stream_name = request.form.get('stream_name', 'Untitled')
+    stream_desc = request.form.get('stream_description', '')
     stream_id = id_generator()
+    streamer_ip = request.remote_addr
 
     conn, cur = get_cursor()
 
-    stmt = "INSERT INTO streams (id, created_at, stream_name)" \
-           "VALUES (%s, %s, %s);"
-    data = (str(stream_id), datetime.utcnow(), stream_name)
+    stmt = "INSERT INTO streams (id, created_at, stream_name, streamer_ip, stream_desc)" \
+           "VALUES (%s, %s, %s, %s, %s);"
+    data = (str(stream_id), datetime.utcnow(), stream_name, streamer_ip, stream_desc)
     cur.execute(stmt, data)
 
     fin(conn, cur)
@@ -104,3 +107,33 @@ def get_all_streams():
 
     return jsonify({'success': True, 'active_streams': [i[0] for i in ids],
                     'active_names': [i[0] for i in names]})
+
+
+@stream_pages.route('/query/<ip_addr>', methods=['GET'])
+def query_by_ip(ip_addr):
+    """
+     @api {get} /stream/query/:streamer_ip Get Stream ID by IP
+     @apiName GetStreamIdByIp
+     @apiGroup Stream
+
+     @apiParam {String} streamer_ip Streamer IP address to be queried
+
+     @apiSuccess {String} stream_id Corresponding Stream ID with that IP address
+     @apiSuccess {Boolean} success Indicate whether this request success
+
+     @apiDescription This endpoint takes an IP as a query parameter. It looks up in the database
+     about associated active stream. Returns the stream ID.
+     """
+    conn, cur = get_cursor()
+
+    stmt = "SELECT id FROM streams WHERE streamer_ip = %s;"
+    data = (ip_addr,)
+    cur.execute(stmt, data)
+    result = cur.fetchone()
+    if result is not None:
+        response = {'success': True, 'stream_id': result[0]}
+    else:
+        response = {'success': False}
+
+    fin(conn, cur)
+    return jsonify(response)

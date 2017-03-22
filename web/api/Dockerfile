@@ -4,6 +4,7 @@ MAINTAINER Han Zhang "hazh@umich.edu"
 WORKDIR /app
 # Installing uwsgi
 RUN pip install uwsgi
+RUN pip install eventlet
 EXPOSE 5000
 ENTRYPOINT ["/app/bin/runserver.py"]
 
