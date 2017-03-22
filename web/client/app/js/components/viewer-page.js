@@ -24,8 +24,9 @@ var ViewerPage = React.createClass({
 
     // Create dummy stream object for now
     var stream = { 'title': this.state.parentId };
-    // And dummy chat room ID
-    var chatRoom = 'foo';
+
+    var doctorChatRoomId = this.state.parentId + '__doctor-chat';
+    var viewerChatRoomId = this.state.parentId + '__viewer-chat';
 
     if (this.state.id == -1) {
       comp = <h3>Stream Unavailable</h3>;
@@ -44,10 +45,10 @@ var ViewerPage = React.createClass({
             </div>
           </div>
           <div className="col-md-4 col-sm-6">
-            <ChatBox title="Doctor Chat" roomId={chatRoom}/>
+            <ChatBox title="Doctor Chat" roomId={doctorChatRoomId}/>
           </div>
           <div className="col-md-4 col-sm-6">
-            <ChatBox title="Viewer Chat" roomId={chatRoom}/>
+            <ChatBox title="Viewer Chat" roomId={viewerChatRoomId}/>
           </div>
         </div>
       );
