@@ -26,3 +26,12 @@ CREATE TABLE chat (
 -- Add test accounts
 INSERT INTO streams (id, stream_name, streamer_ip)
 VALUES ('00000000-0000-0000-0000-000000000000', 'test_stream', '10.0.0.1');
+
+INSERT INTO chat (id, stream_id, content, viewer_chat)
+VALUES
+  ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'viewer only',
+   TRUE);
+
+INSERT INTO chat (id, stream_id, content, viewer_chat)
+VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000',
+        'viewer and streamer', FALSE);

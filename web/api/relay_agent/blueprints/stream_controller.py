@@ -115,7 +115,8 @@ def get_all_streams():
     results = cur.fetchall()
     fin(conn, cur)
 
-    active_streams = [ {'id': i[0], 'name': i[1], 'short_desc': i[2], 'full_desc': i[3]} for i in results]
+    active_streams = [{'id': i[0], 'name': i[1], 'short_desc': i[2], 'full_desc': i[3]} for i in
+                      results]
 
     return jsonify({'success': True, 'active_streams': active_streams})
 
@@ -150,7 +151,7 @@ def query_by_ip(ip_addr):
     return jsonify(response)
 
 
-@stream_pages.route('/<stream_id>', methods='DELETE')
+@stream_pages.route('/<stream_id>', methods=['DELETE'])
 def delete_stream(stream_id):
     """
     @api {delete} /stream/:stream_id Delete Stream
