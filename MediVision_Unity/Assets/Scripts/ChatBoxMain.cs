@@ -25,15 +25,15 @@ public class ChatBoxMain : MonoBehaviour
         socket_io = GameObject.Find("SocketIO");
         socket = socket_io.GetComponent<SocketIOComponent>();
         //socket.url = getURL();
-        socket.Connect();
+        //socket.Connect();
 
-        //chatListen();
+        chatListen();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        chatListen();
+        //chatListen();
         //chatConnected();
     }
 
@@ -59,17 +59,17 @@ public class ChatBoxMain : MonoBehaviour
     }
 
     //listen for and display incoming messages
-    void chatListen()
+    public void chatListen()
     {
         socket.On("00000000-0000-0000-0000-000000000000__doctor-chat", readmessage);
-        if (socket.IsConnected)
+        if (socket.IsConnected) //DELETE ME...........................................
         {
             print("CONNECTED.");
         }
     }
 
     //called when a new message is received
-    void readmessage(SocketIOEvent e)
+    public void readmessage(SocketIOEvent e)
     {
         print("MESSAGE RECEIVED");
         Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
