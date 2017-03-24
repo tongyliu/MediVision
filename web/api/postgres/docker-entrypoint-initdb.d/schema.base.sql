@@ -12,7 +12,8 @@ CREATE TABLE streams (
   client_counter INT       DEFAULT 0, -- Count how many viewers joined
   streamer_ip    TEXT NOT NULL, -- Streamer's IP address
   stream_desc    TEXT      DEFAULT '', -- Stream description
-  stream_short   TEXT      DEFAULT ''-- Stream short description
+  stream_short   TEXT      DEFAULT '', -- Stream short description
+  active         BOOLEAN   DEFAULT FALSE
 );
 
 CREATE TABLE chat (
@@ -24,8 +25,8 @@ CREATE TABLE chat (
 );
 
 -- Add test accounts
-INSERT INTO streams (id, stream_name, streamer_ip)
-VALUES ('00000000-0000-0000-0000-000000000000', 'test_stream', '10.0.0.1');
+INSERT INTO streams (id, stream_name, streamer_ip, active)
+VALUES ('00000000-0000-0000-0000-000000000000', 'test_stream', '10.0.0.1', TRUE);
 
 INSERT INTO chat (id, stream_id, content, viewer_chat)
 VALUES
@@ -35,3 +36,6 @@ VALUES
 INSERT INTO chat (id, stream_id, content, viewer_chat)
 VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000',
         'viewer and streamer', FALSE);
+
+INSERT INTO streams (id, stream_name, streamer_ip)
+VALUES ('00000000-0000-0000-0000-000000000003', 'test_stream', '10.0.0.1');

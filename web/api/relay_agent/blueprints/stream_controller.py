@@ -110,13 +110,13 @@ def get_all_streams():
     """
     conn, cur = get_cursor()
 
-    stmt = "SELECT id, stream_name, stream_short, stream_desc FROM streams;"
+    stmt = "SELECT id, stream_name, stream_short, stream_desc, active FROM streams;"
     cur.execute(stmt)
     results = cur.fetchall()
     fin(conn, cur)
 
     active_streams = [{'id': i[0], 'name': i[1], 'short_desc': i[2], 'full_desc': i[3]} for i in
-                      results]
+                      results if i[4]]
 
     return jsonify({'success': True, 'active_streams': active_streams})
 
@@ -170,7 +170,31 @@ def delete_stream(stream_id):
     conn, cur = get_cursor()
 
     """TODO: Input validation"""
-    stmt = "DELETE FROM streams WHERE id = %s"
+    stmt = "UPDATE streams SET active = FALSE WHERE id = %s"
+    data = (stream_id,)
+    cur.execute(stmt, data)
+
+    fin(conn, cur)
+    return jsonify({'success': True})
+
+
+@stream_pages.route('/activate/<stream_id>', methods=['GET', 'PUT'])
+def activate_stream(stream_id):
+    """
+    @api {get, put} /stream/activate/:stream_id Activate Stream
+    @apiName ActivateStream
+    @apiGroup Stream
+    
+    @apiParam {String} stream_id Stream ID to be activated
+    
+    @apiSuccess {Boolean} success  Indicate whether this request success
+
+    @apiDescription This endpoint updates one specific stream
+    :param stream_id: 
+    :return: 
+    """
+    conn, cur = get_cursor()
+    stmt = "UPDATE streams SET active = TRUE WHERE id = %s;"
     data = (stream_id,)
     cur.execute(stmt, data)
 
