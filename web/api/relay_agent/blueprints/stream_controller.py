@@ -148,3 +148,30 @@ def query_by_ip(ip_addr):
 
     fin(conn, cur)
     return jsonify(response)
+
+
+@stream_pages.route('/<stream_id>', methods='DELETE')
+def delete_stream(stream_id):
+    """
+    @api {delete} /stream/:stream_id Delete Stream
+    @apiName DeleteStream
+    @apiGroup Stream
+
+    @apiParam {String} stream_id Stream ID to be deleted
+
+    @apiSuccess {Boolean} success Indicate whether this request success
+
+    @apiDescription This endpoint deletes one specific stream upon request
+    :param stream_id:
+    :return:
+    """
+    """TODO: Authentication"""
+    conn, cur = get_cursor()
+
+    """TODO: Input validation"""
+    stmt = "DELETE FROM streams WHERE id = %s"
+    data = (stream_id,)
+    cur.execute(stmt, data)
+
+    fin(conn, cur)
+    return jsonify({'success': True})
