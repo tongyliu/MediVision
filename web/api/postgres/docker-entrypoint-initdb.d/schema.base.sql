@@ -6,12 +6,13 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create table schema
 CREATE TABLE streams (
-  id             UUID PRIMARY KEY,  -- Active stream ID
+  id             UUID PRIMARY KEY, -- Active stream ID
   created_at     TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc'),
-  stream_name    TEXT,
+  stream_name    TEXT NOT NULL,
   client_counter INT       DEFAULT 0, -- Count how many viewers joined
-  streamer_ip    TEXT,  -- Streamer's IP address
-  stream_desc    TEXT -- Stream description
+  streamer_ip    TEXT NOT NULL, -- Streamer's IP address
+  stream_desc    TEXT      DEFAULT '', -- Stream description
+  stream_short   TEXT      DEFAULT ''-- Stream short description
 );
 
 CREATE TABLE chat (

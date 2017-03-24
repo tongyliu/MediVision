@@ -4,10 +4,20 @@ Here are handlers for API endpoints
 """
 from datetime import datetime
 
+import logging
 from flask import Blueprint, jsonify, request
 
 from utils.db_driver import get_cursor, fin
 from utils.utils import id_generator
+
+"""
+@api {OBJECT} Stream Stream
+@apiGroup Custom types
+@apiParam {String} stream_id Stream UUID.
+@apiParam {String} stream_name Stream name.
+@apiParam {String} stream_short_desc Stream short description.
+@apiParam {String} stream_full_desc Stream full version of description.
+"""
 
 stream_pages = Blueprint('stream_pages', __name__)
 
@@ -20,7 +30,8 @@ def create_stream():
     @apiGroup Stream
 
     @apiParam {String} stream_name Name of the new stream
-    @apiParam {String} stream_description Detailed description of the new stream
+    @apiParam {String} stream_short_desc Short description of the new stream. AKA tag line
+    @apiParam {String} stream_full_desc Detailed description of the new stream
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {String} stream_id Newly generated stream ID for this stream
@@ -28,15 +39,18 @@ def create_stream():
     @apiDescription This endpoint accepts request to create new stream
     """
     stream_name = request.form.get('stream_name', 'Untitled')
-    stream_desc = request.form.get('stream_description', '')
+    stream_desc = request.form.get('stream_full_desc', '')
+    stream_short = request.form.get('stream_short_desc', '')
     stream_id = id_generator()
     streamer_ip = request.remote_addr
 
     conn, cur = get_cursor()
 
-    stmt = "INSERT INTO streams (id, created_at, stream_name, streamer_ip, stream_desc)" \
-           "VALUES (%s, %s, %s, %s, %s);"
-    data = (str(stream_id), datetime.utcnow(), stream_name, streamer_ip, stream_desc)
+    stmt = "INSERT INTO streams " \
+           "(id, created_at, stream_name, streamer_ip, stream_desc, stream_short)" \
+           "VALUES (%s, %s, %s, %s, %s, %s);"
+    data = (str(stream_id), datetime.utcnow(), stream_name, streamer_ip, stream_desc,
+            stream_short,)
     cur.execute(stmt, data)
 
     fin(conn, cur)
@@ -62,7 +76,7 @@ def get_stream(stream_id):
 
     conn, cur = get_cursor()
 
-    stmt = 'SElECT client_counter FROM streams WHERE id=%s;'
+    stmt = 'SELECT client_counter FROM streams WHERE id=%s;'
     cur.execute(stmt, (stream_id,))
     result = cur.fetchone()
 
@@ -89,24 +103,21 @@ def get_all_streams():
     @apiGroup Stream
 
     @apiSuccess {Boolean} success Indicate whether this request success
-    @apiSuccess {String[]} active_streams A list of active stream IDs
-    @apiSuccess {String[]} active_names A list of active stream names
+    @apiSuccess {[Stream](#api-Custom_types-ObjectStream)[]} active_streams Streams that are
+    currently online
 
     @apiDescription This endpoint returns a list of currently active streams with their IDs
     """
     conn, cur = get_cursor()
 
-    stmt = "SELECT id FROM streams;"
+    stmt = "SELECT id, stream_name, stream_short, stream_desc FROM streams;"
     cur.execute(stmt)
-    ids = cur.fetchall()
-    stmt = "SELECT stream_name FROM streams;"
-    cur.execute(stmt)
-    names = cur.fetchall()
-
+    results = cur.fetchall()
     fin(conn, cur)
 
-    return jsonify({'success': True, 'active_streams': [i[0] for i in ids],
-                    'active_names': [i[0] for i in names]})
+    active_streams = [ {'id': i[0], 'name': i[1], 'short_desc': i[2], 'full_desc': i[3]} for i in results]
+
+    return jsonify({'success': True, 'active_streams': active_streams})
 
 
 @stream_pages.route('/query/<ip_addr>', methods=['GET'])
@@ -137,3 +148,30 @@ def query_by_ip(ip_addr):
 
     fin(conn, cur)
     return jsonify(response)
+
+
+@stream_pages.route('/<stream_id>', methods='DELETE')
+def delete_stream(stream_id):
+    """
+    @api {delete} /stream/:stream_id Delete Stream
+    @apiName DeleteStream
+    @apiGroup Stream
+
+    @apiParam {String} stream_id Stream ID to be deleted
+
+    @apiSuccess {Boolean} success Indicate whether this request success
+
+    @apiDescription This endpoint deletes one specific stream upon request
+    :param stream_id:
+    :return:
+    """
+    """TODO: Authentication"""
+    conn, cur = get_cursor()
+
+    """TODO: Input validation"""
+    stmt = "DELETE FROM streams WHERE id = %s"
+    data = (stream_id,)
+    cur.execute(stmt, data)
+
+    fin(conn, cur)
+    return jsonify({'success': True})
