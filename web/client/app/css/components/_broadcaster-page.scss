@@ -3,24 +3,20 @@
 	margin: 20px auto 0;
 }
 
-.ip-form {
-	max-width: 500px;
-	margin: 40px auto;
-	padding: 20px;
+.stream-form {
+	max-width: 640px;
+	margin: 0 auto;
 
-	label {
-		display: block;
-		margin-bottom: 10px;
-		font-size: 1.6em;
+	.panel {
+		margin-top: 40px;
+		padding: 20px;
 	}
 
-	input {
-		font-size: 1.8em;
-		width: 100%;
-		padding: 5px 10px;
+	textarea {
+		resize: none;
 	}
 
-	button {
-		margin-top: 15px;
+	.btn {
+		margin-top: 8px;
 	}
 }

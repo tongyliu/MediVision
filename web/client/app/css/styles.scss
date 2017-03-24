@@ -11,3 +11,18 @@ body {
 	@include shadow;
 	border: none;
 }
+
+// Bootstrap form style overrides
+
+.list-group-item, .form-control {
+	border-color: $grey;
+	box-shadow: none;
+}
+
+.form-control:focus, .form-control:active {
+	border-color: #66afe9;
+}
+
+::placeholder {
+	font-style: italic;
+}

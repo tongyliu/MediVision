@@ -9,38 +9,77 @@ var ParentVideo = require('./webrtc-video').ParentVideo;
 var Address4 = require('ip-address').Address4;
 var qs = require('qs');
 
-var IpForm = React.createClass({
+var StreamForm = React.createClass({
   getInitialState: function() {
-    return { ip: '' };
+    return { ip: '', title: '', tagline: '', desc: '' };
   },
 
   render: function() {
     return (
-      <div className="ip-form panel panel-default no-border">
-        <div className="panel-body">
-          <form onSubmit={this._handleSubmit}>
-            <label htmlFor="ip-input">Enter HoloLens IP Address</label>
-            <input
-              id="ip-input" type="text"
-              onChange={this._onChange} value={this.state.ip}
-            />
-            <button className="btn btn-lg btn-success">
-              Next
-            </button>
-          </form>
+      <div className="stream-form">
+        <h1>Start a Stream</h1>
+        <div className="panel panel-default no-border">
+          <div className="panel-body">
+            <form onSubmit={this._handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="ip-input">HoloLens IP Address</label>
+                <input
+                  id="ip-input" className="form-control" type="text"
+                  onChange={this._onChange.bind(this, 'ip')}
+                  value={this.state.ip}
+                />
+                <p className="help-block">
+                  We use this IP address to connect to the video feed from your
+                  HoloLens. To find the IP address, ensure that your HoloLens
+                  is connected to the same Wi-Fi network as this computer, and
+                  then open the MediVision app on your HoloLens.
+                </p>
+              </div>
+              <hr/>
+              <div className="form-group">
+                <label htmlFor="title-input">Stream Title</label>
+                <input
+                  id="title-input" className="form-control" type="text"
+                  onChange={this._onChange.bind(this, 'title')}
+                  value={this.state.title}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="tagline-input">Stream Tagline</label>
+                <input
+                  id="tagline-input" className="form-control" type="text"
+                  onChange={this._onChange.bind(this, 'tagline')}
+                  value={this.state.tagline}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="desc-input">Stream Description</label>
+                <textarea
+                  id="desc-input" className="form-control" rows="3"
+                  onChange={this._onChange.bind(this, 'desc')}
+                  value={this.state.desc}
+                />
+              </div>
+              <button className="btn btn-lg btn-success">
+                Next
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     );
   },
 
-  _onChange: function(evt) {
-    this.setState({ ip: evt.target.value });
+  _onChange: function(key, evt) {
+    var updateHash = {};
+    updateHash[key] = evt.target.value;
+    this.setState(updateHash);
   },
 
   _handleSubmit: function(evt) {
     evt.preventDefault();
     if (this._validate()) {
-      this.props.onSubmit(this.state.ip);
+      this.props.onSubmit(this.state);
     } else {
       alert('Invalid IP address, try again.');
     }
@@ -64,7 +103,7 @@ var BroadcasterPage = React.createClass({
       var videoUrl = this._generateVideoUrl();
       pageComponent = <ParentVideo src={videoUrl} autoPlay={true} loop={true}/>
     } else {
-      pageComponent = <IpForm onSubmit={this.submitIp}/>
+      pageComponent = <StreamForm onSubmit={this.submitStreamInfo}/>
     }
 
     return (
@@ -74,8 +113,13 @@ var BroadcasterPage = React.createClass({
     );
   },
 
-  submitIp: function(ip) {
-    this.setState({ holoLensIp: ip });
+  submitStreamInfo: function(info) {
+    this.setState({
+      holoLensIp: info.ip,
+      streamTitle: info.title,
+      streamTagline: info.tagline,
+      streamDesc: info.desc
+    });
   },
 
   _generateVideoUrl: function() {
