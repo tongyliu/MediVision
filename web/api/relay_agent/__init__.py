@@ -5,6 +5,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
+from relay_agent.blueprints.chat_controller import chat_pages
 from relay_agent.blueprints.default_controller import misc_pages
 from relay_agent.blueprints.stream_controller import stream_pages
 from utils.db_driver import get_cursor, fin
@@ -26,6 +27,7 @@ socket_prefix = api_prefix + '/socket'
 
 app.register_blueprint(misc_pages, url_prefix=api_prefix)
 app.register_blueprint(stream_pages, url_prefix=api_prefix + '/stream')
+app.register_blueprint(chat_pages, url_prefix=api_prefix + '/chat')
 
 
 # TODO: Refactor these decorators to separate file
