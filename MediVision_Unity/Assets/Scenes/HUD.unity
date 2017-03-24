@@ -477,9 +477,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 361102403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e95658e5bfd2ad4fad11e591291c2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: b6e4a2c4eb860a74fae66269c1bcca00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverURL: ws://34.198.160.73/api/socket/
+  urlSuffix: socket.io/?EIO=4&transport=websocket
+  checkConnectionDelay: 5
+  msgPrefab: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
+  msgParentPanel: {fileID: 361102404}
+  titleText: {fileID: 1581492273}
 --- !u!114 &361102406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1386,9 +1392,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 975295869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e95658e5bfd2ad4fad11e591291c2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: b6e4a2c4eb860a74fae66269c1bcca00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverURL: ws://34.198.160.73/api/socket/
+  urlSuffix: socket.io/?EIO=4&transport=websocket
+  checkConnectionDelay: 5
+  msgPrefab: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
+  msgParentPanel: {fileID: 975295870}
+  titleText: {fileID: 1336652235}
 --- !u!114 &975295874
 MonoBehaviour:
   m_ObjectHideFlags: 0
