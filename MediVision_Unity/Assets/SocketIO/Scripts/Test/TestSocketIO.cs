@@ -30,8 +30,6 @@ using System.Collections;
 using UnityEngine;
 using SocketIO;
 
-//listen locally at: ws://localhost:4567/socket.io/?EIO=4&transport=websocket
-
 public class TestSocketIO : MonoBehaviour
 {
 	private SocketIOComponent socket;
@@ -43,11 +41,11 @@ public class TestSocketIO : MonoBehaviour
 
 		socket.On("open", TestOpen);
 		socket.On("boop", TestBoop);
-        socket.On("error", TestError);
-        socket.On("close", TestClose);
-
-        StartCoroutine("BeepBoop");
-    }
+		socket.On("error", TestError);
+		socket.On("close", TestClose);
+		
+		StartCoroutine("BeepBoop");
+	}
 
 	private IEnumerator BeepBoop()
 	{
@@ -55,23 +53,23 @@ public class TestSocketIO : MonoBehaviour
 		yield return new WaitForSeconds(1);
 		
 		socket.Emit("beep");
-
-        // wait 3 seconds and continue
-        yield return new WaitForSeconds(3);
-
-        socket.Emit("beep");
-
-        // wait 2 seconds and continue
-        yield return new WaitForSeconds(2);
-
-        socket.Emit("beep");
-
-        // wait ONE FRAME and continue
-        yield return null;
-
-        socket.Emit("beep");
-        socket.Emit("beep");
-    }
+		
+		// wait 3 seconds and continue
+		yield return new WaitForSeconds(3);
+		
+		socket.Emit("beep");
+		
+		// wait 2 seconds and continue
+		yield return new WaitForSeconds(2);
+		
+		socket.Emit("beep");
+		
+		// wait ONE FRAME and continue
+		yield return null;
+		
+		socket.Emit("beep");
+		socket.Emit("beep");
+	}
 
 	public void TestOpen(SocketIOEvent e)
 	{
@@ -80,7 +78,6 @@ public class TestSocketIO : MonoBehaviour
 	
 	public void TestBoop(SocketIOEvent e)
 	{
-        print("GOT A BOOP");
 		Debug.Log("[SocketIO] Boop received: " + e.name + " " + e.data);
 
 		if (e.data == null) { return; }

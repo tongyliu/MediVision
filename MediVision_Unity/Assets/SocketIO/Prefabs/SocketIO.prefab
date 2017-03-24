@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://34.198.160.73/api/socket/
+  url: 77733a2f2f3132372e302e302e313a343536372f736f636b65742e696f2f3f45494f3d34267472616e73706f72743d776562736f636b6574
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800
