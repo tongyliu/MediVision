@@ -12,6 +12,13 @@ Run the following commands to create virtual environment
     
     pip install -e .
     
+    
+Setup environment variables
+    
+    mv settings.env.sample settings.env
+    
+And change correct values in `settings.env`
+
 ## Modules
 
 - [bin](bin) All executables
@@ -20,6 +27,7 @@ Run the following commands to create virtual environment
 
 ## Run Server
 
+    source settings.env # Load environment variables
     ./bin/runserver.py
     
 Currently, the main entry point is *localhost:5000/api/*
