@@ -5,13 +5,11 @@
  */
 
 var React = require('react');
-var request = require('request');
 var io = require('socket.io-client');
 var _ = require('lodash');
 var config = require('../config');
 
 var socket = io.connect(config.SOCKET_URL);
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
 
 function logError(err) {
   console.error(err);
@@ -22,13 +20,8 @@ var allowedVideoProps = [
 ];
 
 var ParentVideo = React.createClass({
-  getInitialState: function() {
-    return { streamId: null };
-  },
-
   render: function() {
     var vidProps = _.pick(this.props, allowedVideoProps);
-    var buttonDisabled = !!this.state.streamId;
 
     return (
       <div className="parent-video">
@@ -36,17 +29,13 @@ var ParentVideo = React.createClass({
           <source src={this.props.src} type="video/mp4"/>
           <p className="vjs-no-js">Unsupported Browser</p>
         </video>
-        <button
-          className="btn btn-lg btn-success" role="button"
-          onClick={this._publishStream} disabled={buttonDisabled}>
-          Start Streaming
-        </button>
       </div>
     );
   },
 
   componentDidMount: function() {
     this.peerConnections = {};
+    socket.on(this.props.streamId, this._receiveFromClient);
     // We need to add a slight timeout before getting the stream to ensure that
     // the DOM is fully ready
     var delay = 300;
@@ -58,20 +47,6 @@ var ParentVideo = React.createClass({
       }
       this.refs.video.play();
     }.bind(this), delay);
-  },
-
-  _publishStream: function() {
-    r.post('/stream/', function(err, res, body) {
-      if (!err && res.statusCode == 200 && body['success']) {
-        var streamId = body['stream_id'];
-        console.log('received stream ID:', streamId);
-        this.setState({ streamId: streamId }, function() {
-          socket.on(streamId, this._receiveFromClient);
-        }.bind(this));
-      } else {
-        console.warn('API request returned error');
-      }
-    }.bind(this));
   },
 
   _createStreamIfNeeded: function() {
@@ -119,7 +94,7 @@ var ParentVideo = React.createClass({
     pc.onicecandidate = function(evt) {
       if (evt.candidate) {
         socket.emit('send', {
-          to: [this.state.streamId, clientId].join(),
+          to: [this.props.streamId, clientId].join(),
           type: 'icecandidate',
           data: evt.candidate
         });
@@ -140,7 +115,7 @@ var ParentVideo = React.createClass({
       .then(function(desc) {
         pc.setLocalDescription(desc).catch(logError);
         socket.emit('send', {
-          to: [this.state.streamId, clientId].join(),
+          to: [this.props.streamId, clientId].join(),
           type: 'desc',
           data: desc
         });

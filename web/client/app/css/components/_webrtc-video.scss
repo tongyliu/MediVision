@@ -1,21 +1,7 @@
-.parent-video {
-	margin: 40px;
-	text-align: center;
-
-	video {
-		max-width: 640px;
-		max-height: 360px;
-	}
-
-	button {
-		display: block;
-		margin: 30px auto;
-	}
-}
-
-.child-video {
+.parent-video, .child-video {
 	video {
 		width: 100%;
 		background-color: black;
+		display: block;
 	}
 }
