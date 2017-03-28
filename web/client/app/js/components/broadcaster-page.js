@@ -8,6 +8,7 @@ var React = require('react');
 var ParentVideo = require('./webrtc-video').ParentVideo;
 var StreamDesc = require('./stream-desc');
 var Address4 = require('ip-address').Address4;
+var classNames = require('classnames');
 var request = require('request');
 var qs = require('qs');
 var config = require('../config');
@@ -108,7 +109,6 @@ var BroadcasterPage = React.createClass({
       pageComponent = <StreamForm onSubmit={this._submitStreamInfo}/>
     } else {
       var videoUrl = this._generateVideoUrl();
-      var buttonDisabled = !!this.state.streamActive;
       pageComponent = (
         <div>
           <ParentVideo
@@ -116,11 +116,14 @@ var BroadcasterPage = React.createClass({
             autoPlay={true} loop={true}
           />
           <StreamDesc stream={this.state.streamInfo}/>
-          <button
-            className="btn btn-lg btn-success stream-btn" role="button"
-            onClick={this._publishStream} disabled={buttonDisabled}>
-            Start Streaming
-          </button>
+          <a
+            className={classNames('btn btn-lg stream-btn', {
+              'btn-success': !this.state.streamActive,
+              'btn-danger': this.state.streamActive
+            })}
+            onClick={this._togglePublishedState}>
+            {!this.state.streamActive ? 'Start Streaming' : 'Stop Streaming'}
+          </a>
         </div>
       );
     }
@@ -160,11 +163,30 @@ var BroadcasterPage = React.createClass({
     }.bind(this));
   },
 
+  _togglePublishedState: function() {
+    if (this.state.streamActive) {
+      this._unpublishStream();
+    } else {
+      this._publishStream();
+    }
+  },
+
   _publishStream: function() {
     var endpointUrl = '/stream/activate/' + this.state.streamId;
     r.put(endpointUrl, function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
         this.setState({ streamActive: true });
+      } else {
+        console.warn('API request returned error');
+      }
+    }.bind(this));
+  },
+
+  _unpublishStream: function() {
+    var endpointUrl = '/stream/' + this.state.streamId;
+    r.delete(endpointUrl, function(err, res, body) {
+      if (!err && res.statusCode == 200 && body['success']) {
+        this.setState({ streamActive: false });
       } else {
         console.warn('API request returned error');
       }

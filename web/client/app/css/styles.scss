@@ -12,6 +12,10 @@ body {
 	border: none;
 }
 
+.btn {
+	transition: 0.25s ease background-color;
+}
+
 // Bootstrap form style overrides
 
 .list-group-item, .form-control {
