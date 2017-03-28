@@ -22,9 +22,6 @@ var ViewerPage = React.createClass({
   render: function() {
     var comp = null;
 
-    // Create dummy stream object for now
-    var stream = { 'title': this.state.parentId };
-
     if (this.state.id == -1) {
       comp = <h3>Stream Unavailable</h3>;
     } else if (this.state.id !== undefined) {
@@ -32,7 +29,7 @@ var ViewerPage = React.createClass({
         <div className="row">
           <div className="col col-md-8">
             <ChildVideo id={this.state.id} parentId={this.state.parentId}/>
-            <StreamDesc stream={stream}/>
+            <StreamDesc stream={this.state.stream}/>
           </div>
           <div className="col-md-4 col-sm-6">
             <ChatBox
@@ -68,12 +65,22 @@ var ViewerPage = React.createClass({
 
     r.get('/stream/' + queryParams['stream_id'], function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
-        this.setState({ id: body['client_id'] });
+        var stream = this._convertStream(body['stream']);
+        this.setState({ id: body['client_id'], stream: stream });
       } else {
         console.warn('API request returned error');
         this.setState({ id: -1 });
       }
     }.bind(this));
+  },
+
+  _convertStream: function(rawStream) {
+    return {
+      id: rawStream['stream_id'],
+      title: rawStream['stream_name'],
+      tagline: rawStream['stream_short_desc'],
+      desc: rawStream['stream_full_desc']
+    }
   }
 });
 

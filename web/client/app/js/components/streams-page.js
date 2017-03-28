@@ -19,21 +19,15 @@ var StreamsPage = React.createClass({
 
   render: function() {
     var streamComponents = this.state.streams.map(function(stream) {
-      // Temporary workaround to handle streams that are received as just
-      // an ID and not an object
-      if (typeof stream == 'string') {
-        stream = { stream_id: stream };
-      }
-
       return (
         <div key={stream['stream_id']} className="col-sm-6 col-md-4">
           <div className="thumbnail no-border">
             <div className="caption">
-              <h3>{stream['stream_id']}</h3>
-              <p className={classNames({
-                'text-muted': !stream['desc']
+              <h3>{stream['stream_name']}</h3>
+              <p className={classNames('text-muted', {
+                'no-tagline': !stream['stream_short_desc']
               })}>
-                {stream['desc'] || 'No description provided'}
+                {stream['stream_short_desc'] || 'No tagline provided'}
               </p>
               <Link
                 to={'/view-stream?stream_id=' + stream['stream_id']}
