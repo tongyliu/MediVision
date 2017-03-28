@@ -6,9 +6,11 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var request = require('request');
 var io = require('socket.io-client');
 var config = require('../config');
 
+var r = request.defaults({ baseUrl: config.API_URL, json: true });
 var socket = io.connect(config.SOCKET_URL);
 
 var Message = React.createClass({
@@ -60,7 +62,18 @@ var ChatBox = React.createClass({
   },
 
   componentDidMount: function() {
-    socket.on(this.props.roomId, this._receiveMsg);
+    r.get({ url: '/chat/' + this.props.streamId, qs: {
+      viewer_only: this.props.viewerOnly
+    }}, function(err, res, body) {
+      if (!err && res.statusCode == 200 && body['success']) {
+        var messages = this._convertHistory(body['chat_messages']);
+        this.setState({ messages: messages }, function() {
+          socket.on(this._getRoomId(), this._receiveMsg);
+        });
+      } else {
+        console.warn('API request returned error');
+      }
+    }.bind(this));
   },
 
   componentDidUpdate: function(prevProps, prevState) {
@@ -84,11 +97,30 @@ var ChatBox = React.createClass({
 
     if (this.state.currentMessage) {
       socket.emit('chat', {
-        to: this.props.roomId,
+        to: this._getRoomId(),
         text: this.state.currentMessage
       });
       this.setState({ currentMessage: '' });
     }
+  },
+
+  _getRoomId: function() {
+    if (this.props.viewerOnly) {
+      return this.props.streamId + '__viewer-chat';
+    } else {
+      return this.props.streamId + '__doctor-chat';
+    }
+  },
+
+  _convertHistory: function(msgArr) {
+    if (!msgArr) return [];
+
+    return msgArr.map(function(rawMsg) {
+      return {
+        id: rawMsg['chat_id'],
+        text: rawMsg['chat_content']
+      }
+    });
   }
 });
 
