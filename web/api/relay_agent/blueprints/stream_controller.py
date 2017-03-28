@@ -76,6 +76,7 @@ def get_stream(stream_id):
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {Number} client_id Indicate which client it is contacting this live stream
+    @apiSuccess {[Stream](#api-Custom_types-ObjectStream)} stream Detail information about the stream.
 
     @apiDescription This endpoint returns information about requested stream
     """
@@ -83,7 +84,7 @@ def get_stream(stream_id):
 
     conn, cur = get_cursor()
 
-    stmt = 'SELECT client_counter FROM streams WHERE id=%s;'
+    stmt = 'SELECT client_counter, stream_name, stream_short, stream_desc FROM streams WHERE id=%s;'
     cur.execute(stmt, (stream_id,))
     result = cur.fetchone()
 
@@ -96,6 +97,8 @@ def get_stream(stream_id):
 
         res['success'] = True
         res['client_id'] = counter
+        res['stream'] = {'stream_id': stream_id, 'stream_name': result[1],
+                         'stream_short_desc': result[2], 'stream_full_desc': result[3]}
 
     fin(conn, cur)
 
@@ -122,7 +125,8 @@ def get_all_streams():
     results = cur.fetchall()
     fin(conn, cur)
 
-    active_streams = [{'id': i[0], 'name': i[1], 'short_desc': i[2], 'full_desc': i[3]} for i in
+    active_streams = [{'stream_id': i[0], 'stream_name': i[1], 'stream_short_desc': i[2],
+                       'stream_full_desc': i[3]} for i in
                       results if i[4]]
 
     return jsonify({'success': True, 'active_streams': active_streams})

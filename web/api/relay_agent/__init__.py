@@ -19,7 +19,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/stream*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/stream*": {"origins": "*"}, r"/api/chat*": {"origins": "*"}})
 socketio = SocketIO(app)
 
 api_prefix = '/api'

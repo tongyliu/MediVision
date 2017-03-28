@@ -38,4 +38,4 @@ VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-0000000
         'viewer and streamer', FALSE);
 
 INSERT INTO streams (id, stream_name, streamer_ip)
-VALUES ('00000000-0000-0000-0000-000000000003', 'test_stream', '10.0.0.1');
+VALUES ('00000000-0000-0000-0000-000000000003', 'test_stream', '10.0.0.2');
