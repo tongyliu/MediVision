@@ -32,6 +32,7 @@ def create_stream():
     @apiParam {String} stream_name Name of the new stream
     @apiParam {String} stream_short_desc Short description of the new stream. AKA tag line
     @apiParam {String} stream_full_desc Detailed description of the new stream
+    @apiParam {String} stream_ip IP address of the streamer
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {String} stream_id Newly generated stream ID for this stream
@@ -42,7 +43,13 @@ def create_stream():
     stream_desc = request.form.get('stream_full_desc', '')
     stream_short = request.form.get('stream_short_desc', '')
     stream_id = id_generator()
-    streamer_ip = request.remote_addr
+    streamer_ip = request.form.get('stream_ip', '')
+
+    if streamer_ip == '':
+        return jsonify({
+            'success': False,
+            'reason': 'Need a valid stream_ip'
+        })
 
     conn, cur = get_cursor()
 
