@@ -7,7 +7,7 @@
 var React = require('react');
 var ChildVideo = require('./webrtc-video').ChildVideo;
 var ChatBox = require('./chat-box');
-var classNames = require('classnames');
+var StreamDesc = require('./stream-desc');
 var request = require('request');
 var config = require('../config');
 
@@ -35,14 +35,7 @@ var ViewerPage = React.createClass({
         <div className="row">
           <div className="col col-md-8">
             <ChildVideo id={this.state.id} parentId={this.state.parentId}/>
-            <div className="video-desc panel no-border">
-              <h3>{stream['title']}</h3>
-              <p className={classNames({
-                'text-muted': !stream['desc']
-              })}>
-                {stream['desc'] || 'No description provided'}
-              </p>
-            </div>
+            <StreamDesc stream={stream}/>
           </div>
           <div className="col-md-4 col-sm-6">
             <ChatBox title="Doctor Chat" roomId={doctorChatRoomId}/>

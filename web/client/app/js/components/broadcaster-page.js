@@ -6,8 +6,13 @@
 
 var React = require('react');
 var ParentVideo = require('./webrtc-video').ParentVideo;
+var StreamDesc = require('./stream-desc');
 var Address4 = require('ip-address').Address4;
+var request = require('request');
 var qs = require('qs');
+var config = require('../config');
+
+var r = request.defaults({ baseUrl: config.API_URL, json: true });
 
 var StreamForm = React.createClass({
   getInitialState: function() {
@@ -93,17 +98,31 @@ var StreamForm = React.createClass({
 
 var BroadcasterPage = React.createClass({
   getInitialState: function() {
-    return { holoLensIp: null };
+    return { streamId: null };
   },
 
   render: function() {
     var pageComponent;
 
-    if (this.state.holoLensIp) {
-      var videoUrl = this._generateVideoUrl();
-      pageComponent = <ParentVideo src={videoUrl} autoPlay={true} loop={true}/>
+    if (!this.state.streamId) {
+      pageComponent = <StreamForm onSubmit={this._submitStreamInfo}/>
     } else {
-      pageComponent = <StreamForm onSubmit={this.submitStreamInfo}/>
+      var videoUrl = this._generateVideoUrl();
+      var buttonDisabled = !!this.state.streamActive;
+      pageComponent = (
+        <div>
+          <ParentVideo
+            streamId={this.state.streamId} src={videoUrl}
+            autoPlay={true} loop={true}
+          />
+          <StreamDesc stream={this.state.streamInfo}/>
+          <button
+            className="btn btn-lg btn-success stream-btn" role="button"
+            onClick={this._publishStream} disabled={buttonDisabled}>
+            Start Streaming
+          </button>
+        </div>
+      );
     }
 
     return (
@@ -113,17 +132,8 @@ var BroadcasterPage = React.createClass({
     );
   },
 
-  submitStreamInfo: function(info) {
-    this.setState({
-      holoLensIp: info.ip,
-      streamTitle: info.title,
-      streamTagline: info.tagline,
-      streamDesc: info.desc
-    });
-  },
-
   _generateVideoUrl: function() {
-    var baseUrl = 'http://' + this.state.holoLensIp;
+    var baseUrl = 'http://' + this.state.streamInfo.ip;
     var queryString = qs.stringify({
       holo: false,
       pv: true,
@@ -131,6 +141,34 @@ var BroadcasterPage = React.createClass({
       loopback: false
     });
     return baseUrl + '/api/holographic/stream/live_high.mp4?' + queryString;
+  },
+
+  _submitStreamInfo: function(info) {
+    r.post({ url: '/stream/', form: {
+      stream_name: info.title,
+      stream_short_desc: info.tagline,
+      stream_full_desc: info.desc,
+      stream_ip: info.ip
+    }}, function(err, res, body) {
+      if (!err && res.statusCode == 200 && body['success']) {
+        var streamId = body['stream_id'];
+        console.log('received stream ID:', streamId);
+        this.setState({ streamId: streamId, streamInfo: info });
+      } else {
+        console.warn('API request returned error');
+      }
+    }.bind(this));
+  },
+
+  _publishStream: function() {
+    var endpointUrl = '/stream/activate/' + this.state.streamId;
+    r.put(endpointUrl, function(err, res, body) {
+      if (!err && res.statusCode == 200 && body['success']) {
+        this.setState({ streamActive: true });
+      } else {
+        console.warn('API request returned error');
+      }
+    }.bind(this));
   }
 });
 

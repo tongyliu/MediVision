@@ -1,6 +1,24 @@
 .broadcaster-page {
+	max-width: 900px;
 	padding: 20px;
 	margin: 20px auto 0;
+
+	.parent-video {
+		margin: 20px 0;
+	}
+
+	.stream-btn {
+		display: block;
+		margin: 0 auto 20px;
+	}
+
+	.video-desc {
+		padding: 10px 20px 20px;
+
+		.text-muted {
+			font-style: italic;
+		}
+	}
 }
 
 .stream-form {
