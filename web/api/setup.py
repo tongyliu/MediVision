@@ -21,5 +21,6 @@ setup(
         'flask-socketio==2.8.3',
         'flask-cors==3.0.2',
         'psycopg2==2.7.1',
+        'pyjwt==1.4.2',
     ]
 )

@@ -5,6 +5,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
+from relay_agent.blueprints.auth_controller import auth_pages
 from relay_agent.blueprints.chat_controller import chat_pages
 from relay_agent.blueprints.default_controller import misc_pages
 from relay_agent.blueprints.stream_controller import stream_pages
@@ -19,7 +20,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/stream*": {"origins": "*"}, r"/api/chat*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app)
 
 api_prefix = '/api'
@@ -28,6 +29,7 @@ socket_prefix = api_prefix + '/socket'
 app.register_blueprint(misc_pages, url_prefix=api_prefix)
 app.register_blueprint(stream_pages, url_prefix=api_prefix + '/stream')
 app.register_blueprint(chat_pages, url_prefix=api_prefix + '/chat')
+app.register_blueprint(auth_pages, url_prefix=api_prefix + '/auth')
 
 
 # TODO: Refactor these decorators to separate file
