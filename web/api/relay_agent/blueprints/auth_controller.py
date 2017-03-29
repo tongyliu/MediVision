@@ -1,6 +1,8 @@
 """Authentication controllers
 
 Here are handlers for API endpoints
+
+XXX Note: Authentication module is schduled for Omega release, so here it is a work in progress
 """
 from flask import Blueprint
 import os
