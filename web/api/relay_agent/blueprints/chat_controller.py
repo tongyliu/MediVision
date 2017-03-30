@@ -34,6 +34,7 @@ def get_history(stream_id):
 
     @apiDescription This endpoint fetches all chat history for a specific stream
     """
+    logging.info('Receive request for /chat/' + stream_id)
     viewer = request.args.get('viewer_only', '')
     if viewer == 'true':
         viewer = True
@@ -52,4 +53,7 @@ def get_history(stream_id):
     messages = [{'chat_id': i[0], 'chat_content': i[1], 'chat_created_at': mktime(i[2].timetuple())}
                 for i in results]
 
-    return jsonify({'success': True, 'chat_messages': messages})
+    response = {'success': True, 'chat_messages': messages}
+    logging.info('Response for /chat/' + stream_id + ': ' + str(response))
+
+    return jsonify(response)

@@ -147,6 +147,7 @@ def query_by_ip(ip_addr):
      @apiDescription This endpoint takes an IP as a query parameter. It looks up in the database
      about associated active stream. Returns the stream ID.
      """
+    logging.info('Receive request for /stream/query/' + ip_addr)
     conn, cur = get_cursor()
 
     stmt = "SELECT id FROM streams WHERE streamer_ip = %s;"
@@ -159,6 +160,9 @@ def query_by_ip(ip_addr):
         response = {'success': False}
 
     fin(conn, cur)
+
+    logging.info('Response for /stream/query/' + ip_addr + ': ' + str(response))
+
     return jsonify(response)
 
 

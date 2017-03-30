@@ -21,7 +21,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-socketio = SocketIO(app)
+socketio = SocketIO(app, engineio_logger=True)
 
 api_prefix = '/api'
 socket_prefix = api_prefix + '/socket'
