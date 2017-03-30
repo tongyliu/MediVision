@@ -15,6 +15,7 @@ public class JSONResponses : MonoBehaviour {
 	}
 }
 
+[System.Serializable]
 public class StreamID {
 
     public string stream_id;

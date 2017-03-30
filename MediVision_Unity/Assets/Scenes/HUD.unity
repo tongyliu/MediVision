@@ -287,6 +287,12 @@ MonoBehaviour:
   debug_capture_on: 0
   disconnectionMessage: Stream Disconnected
   ___________________________: 0
+--- !u!114 &331957774 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114912508763807164, guid: 08bf54483fb250346b11c66b8be528c9,
+    type: 2}
+  m_PrefabInternal: {fileID: 471524086}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &348723320
 Prefab:
   m_ObjectHideFlags: 0
@@ -346,6 +352,7 @@ GameObject:
   - component: {fileID: 361102408}
   - component: {fileID: 361102407}
   - component: {fileID: 361102406}
+  - component: {fileID: 361102405}
   m_Layer: 5
   m_Name: Chat_panel (1)
   m_TagString: Untagged
@@ -373,6 +380,26 @@ RectTransform:
   m_AnchoredPosition: {x: 5.89, y: -5.37}
   m_SizeDelta: {x: 255.80005, y: 0}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &361102405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 361102403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e4a2c4eb860a74fae66269c1bcca00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverURL: http://34.198.160.73/api/stream/query/
+  stream_id: 
+  IP: 
+  urlSuffix: socket.io/?EIO=4&transport=websocket
+  checkConnectionDelay: 5
+  msgPrefab: {fileID: 696921162}
+  currentMesage: {fileID: 331957774}
+  msgParentPanel: {fileID: 361102404}
+  titleText: {fileID: 1581492273}
 --- !u!114 &361102406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,7 +523,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -28.85
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -516,7 +543,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -526,7 +553,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -546,17 +573,17 @@ Prefab:
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -9.85
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -568,6 +595,16 @@ Prefab:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 2100000, guid: 7187377b157675449ad892634f194ca6, type: 2}
+    - target: {fileID: 114912508763807164, guid: 08bf54483fb250346b11c66b8be528c9,
+        type: 2}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114584777811179402, guid: 08bf54483fb250346b11c66b8be528c9,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
   m_IsPrefabParent: 0
@@ -586,6 +623,7 @@ GameObject:
   - component: {fileID: 633141678}
   - component: {fileID: 633141677}
   - component: {fileID: 633141680}
+  - component: {fileID: 633141681}
   m_Layer: 0
   m_Name: HUD
   m_TagString: Untagged
@@ -729,6 +767,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAxis: 1
+--- !u!114 &633141681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 633141672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4333e6f284c4e4eb1c7257fe866c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IP_box: {fileID: 300801562}
+  IP_Fade_Delay: 3
+  IP_Fade_Speed: 0.01
+  debug_capture_on: 0
+  disconnectionMessage: Stream Disconnected
+  ___________________________: 0
+--- !u!1 &696921162 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9,
+    type: 2}
+  m_PrefabInternal: {fileID: 471524086}
 --- !u!1001 &976442468
 Prefab:
   m_ObjectHideFlags: 0

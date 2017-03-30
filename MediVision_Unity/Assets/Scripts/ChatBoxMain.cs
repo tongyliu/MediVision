@@ -13,10 +13,12 @@ public class ChatBoxMain : MonoBehaviour
     public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
     public float checkConnectionDelay = 5; //seconds
     public GameObject msgPrefab;
+    public Text currentMesage;
     public Transform msgParentPanel;
     public Text titleText;
 
     float timeOfLastCheck = 0;
+    bool alreadyCalled = false;
 
 
 
@@ -24,7 +26,9 @@ public class ChatBoxMain : MonoBehaviour
     void Start()
     {
         Debug.Log("I am alive!");
-        StartCoroutine(GetText());
+
+        Debug.Log("CHATBOX MAIN HAS STARTED");
+
 
     }
 
@@ -43,12 +47,23 @@ public class ChatBoxMain : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {  
+    {
+        if (HUD.S.captureOn() && !alreadyCalled) {
+            Debug.Log("CALLED COROUTINE TO GET STREAM ID");
+            StartCoroutine(GetText());
+            alreadyCalled = true;
+        }
     }
 
     IEnumerator GetText()
     {
-        StreamID stream_info;
+        Debug.Log("IN GET TEXT");
+
+
+        Debug.Log("WAIING FOR 5 SECONDS...");
+        yield return new WaitForSeconds(5f);
+
+
         string url = getURL();
         Debug.Log(url);
 
@@ -61,24 +76,30 @@ public class ChatBoxMain : MonoBehaviour
         }
         else
         {
-            stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
-            Debug.Log("STREAM ID: ");
-            Debug.Log(stream_info.stream_id);
+            Debug.Log("PARSING JSON...");
+            StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
 
-            StartCoroutine(getMessage(stream_info));
+            Debug.Log("RAW JSON STRING: ");
+            Debug.Log(www.downloadHandler.text);
+
+            Debug.Log("STREAM ID: ");
+            Debug.Log(stream_info.stream_id.ToString());
+
+            StartCoroutine(getMessage(stream_info.stream_id));
         }
     }
 
-    public IEnumerator getMessage(StreamID stream_info) {
+    public IEnumerator getMessage(string id) {
 
 
         while (true) {
 
             Debug.Log("IN GETMESSAGE()");
 
+
             yield return new WaitForSeconds(5f);
 
-            string url = "http://34.198.160.73/api/chat/" + stream_info.stream_id + "?viewer_only=false";
+            string url = "http://34.198.160.73/api/chat/" + id + "?viewer_only=false";
             Debug.Log(url);
 
             ChatResponse chat;
@@ -93,25 +114,47 @@ public class ChatBoxMain : MonoBehaviour
             else
             {
                 chat = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
-                string message = chat.chat_messages[0].chat_content;
-                Debug.Log(message);
-                setMessage(message);
+
+                if (chat.chat_messages.Length > 0)
+                {
+                    string message = chat.chat_messages[chat.chat_messages.Length - 1].chat_content;
+
+                    Debug.Log("CHAT MESSAGE: ");
+                    Debug.Log(message);
+
+
+                    setMessage(message);
+                }
+
             }
         }
     }
 
     public void setMessage(string msg)
     {
-        if (msg == "") return;
-        GameObject msgClone = Instantiate(msgPrefab);
-        msgClone.transform.SetParent(msgParentPanel);
-        msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 2);
-        msgClone.GetComponent<Message>().showMessage(msg);
+
+        Debug.Log("IN SET MESSAGE");
+
+        //if (msg == "") return;
+        //GameObject msgClone = Instantiate(msgPrefab);
+        //msgClone.transform.SetParent(msgParentPanel);
+        //msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 2);
+
+        //var currentPos = msgClone.transform.position;
+        //msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
+
+        //var scale = new Vector3(1, 1, 1);
+        //msgClone.transform.localScale = scale;
+
+        //msgClone.GetComponent<Message>().showMessage(msg);
+
+        currentMesage.text = msg;
+
     }
 
     public string getURL()
     {
-        return serverURL + "10.0.0.1"; //GetIP();
+        return serverURL + GetIP();
     }
 
     string requestStreamIdentifier()

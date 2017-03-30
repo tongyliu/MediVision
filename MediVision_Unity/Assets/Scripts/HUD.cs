@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
+    static public HUD S;
+
     //inspector variables
     public Text IP_box;
     public float IP_Fade_Delay = 3f;
@@ -22,7 +24,7 @@ public class HUD : MonoBehaviour
 
     private void Awake()
     {
-        
+        S = this;
     }
 
     // Use this for initialization
@@ -74,7 +76,7 @@ public class HUD : MonoBehaviour
         }
     }
 
-    bool captureOn()
+    public bool captureOn()
     {
         if (debug_capture_on)
         {
