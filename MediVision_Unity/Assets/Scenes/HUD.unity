@@ -782,7 +782,7 @@ MonoBehaviour:
   IP_Fade_Delay: 3
   IP_Fade_Speed: 0.01
   debug_capture_on: 0
-  disconnectionMessage: Stream Disconnected
+  disconnectionMessage: Could not retrieve
   ___________________________: 0
 --- !u!1 &696921162 stripped
 GameObject:
