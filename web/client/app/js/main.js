@@ -7,6 +7,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
+var History = require('history');
 
 var LoginManager = require('./login-manager');
 
@@ -20,7 +21,13 @@ var ViewerPage = require('./components/viewer-page');
 
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-var browserHistory = ReactRouter.browserHistory;
+var useRouterHistory = ReactRouter.useRouterHistory;
+var createHistory = History.createHistory;
+var useBeforeUnload = History.useBeforeUnload;
+
+// Ensure that router lifecycle hooks get called even when the browser window
+// is refreshed or closed
+var browserHistory = useBeforeUnload(useRouterHistory(createHistory))();
 
 var Page = React.createClass({
   render: function() {
