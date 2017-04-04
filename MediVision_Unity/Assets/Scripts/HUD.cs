@@ -42,7 +42,7 @@ public class HUD : MonoBehaviour
         ip_fade();        
     }
 
-    string GetIP()
+    public string GetIP()
     {
         #if NETFX_CORE
 

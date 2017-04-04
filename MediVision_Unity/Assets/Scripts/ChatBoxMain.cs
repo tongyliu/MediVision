@@ -4,52 +4,61 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
+[System.Serializable]
+public class StreamID
+{
+    public string stream_id;
+    public bool success;
+}
+
+[System.Serializable]
+public class ChatResponse
+{
+    [System.Serializable]
+    public class ChatMessage
+    {
+        public string chat_id;
+        public string chat_content;
+        public string chat_created_at;
+    }
+    public bool success = false;
+    public ChatMessage[] chat_messages;
+}
+
 public class ChatBoxMain : MonoBehaviour
 {
     public string serverURL = "http://3.198.160.73/api/stream/query/";
     //UPDATE WITH SERVER URL
     public string stream_id = "";
-    public string IP;
-    public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
-    public float checkConnectionDelay = 5; //seconds
+    //public string IP;
+    //public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
+    public float checkConnectionDelay = 3; //seconds
     public GameObject msgPrefab;
-    public Text currentMesage;
+    //public Text currentMesage;
     public Transform msgParentPanel;
     public Text titleText;
 
     float timeOfLastCheck = 0;
-    bool alreadyCalled = false;
-
+    bool alreadyCalled = false; //used for coroutine initialization
 
 
     // Use this for initialization
     void Start()
     {
-        Debug.Log("I am alive!");
-
-        Debug.Log("CHATBOX MAIN HAS STARTED");
-
-
-    }
-
-    string GetIP()
-    {
-        #if NETFX_CORE
-
-            System.Collections.Generic.IReadOnlyList<Windows.Networking.HostName> hostNames = 
-                Windows.Networking.Connectivity.NetworkInformation.GetHostNames();
-
-            return hostNames[hostNames.Count - 1].ToString();
-
-        #endif
-        return "THIS DID NOT WORK";
+        Debug.Log("Chatbox: MAIN HAS STARTED");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (HUD.S.captureOn() && !alreadyCalled) {
-            Debug.Log("CALLED COROUTINE TO GET STREAM ID");
+        beginCoroutine();
+    }
+
+    void beginCoroutine()
+    {
+        if (HUD.S.captureOn() && !alreadyCalled)
+        {
+            Debug.Log("Chatbox: CALLED COROUTINE TO GET STREAM ID");
             StartCoroutine(GetText());
             alreadyCalled = true;
         }
@@ -57,10 +66,10 @@ public class ChatBoxMain : MonoBehaviour
 
     IEnumerator GetText()
     {
-        Debug.Log("IN GET TEXT");
+        Debug.Log("Chatbox: IN GET TEXT");
 
 
-        Debug.Log("WAIING FOR 5 SECONDS...");
+        Debug.Log("Chatbox: WAIING FOR 5 SECONDS...");
         yield return new WaitForSeconds(5f);
 
 
@@ -76,31 +85,31 @@ public class ChatBoxMain : MonoBehaviour
         }
         else
         {
-            Debug.Log("PARSING JSON...");
+            Debug.Log("Chatbox: PARSING JSON...");
             StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
 
-            Debug.Log("RAW JSON STRING: ");
+            Debug.Log("Chatbox: RAW JSON STRING: ");
             Debug.Log(www.downloadHandler.text);
 
-            Debug.Log("STREAM ID: ");
+            Debug.Log("Chatbox: STREAM ID: ");
             Debug.Log(stream_info.stream_id.ToString());
 
             StartCoroutine(getMessage(stream_info.stream_id));
         }
     }
 
+    //MUST MODIFY TO GET USERNAME
     public IEnumerator getMessage(string id) {
-
 
         while (true) {
 
-            Debug.Log("IN GETMESSAGE()");
+            Debug.Log("Chatbox: IN GETMESSAGE()");
 
 
             yield return new WaitForSeconds(5f);
 
             string url = "http://34.198.160.73/api/chat/" + id + "?viewer_only=false";
-            Debug.Log(url);
+            Debug.Log("Chatbox: " + url);
 
             ChatResponse chat;
 
@@ -119,9 +128,8 @@ public class ChatBoxMain : MonoBehaviour
                 {
                     string message = chat.chat_messages[chat.chat_messages.Length - 1].chat_content;
 
-                    Debug.Log("CHAT MESSAGE: ");
-                    Debug.Log(message);
-
+                    Debug.Log("Chatbox: CHAT MESSAGE: ");
+                    Debug.Log("Chatbox: " + message);
 
                     setMessage(message);
                 }
@@ -133,69 +141,64 @@ public class ChatBoxMain : MonoBehaviour
     public void setMessage(string msg)
     {
 
-        Debug.Log("IN SET MESSAGE");
+        Debug.Log("Chatbox: IN SET MESSAGE");
 
-        //if (msg == "") return;
-        //GameObject msgClone = Instantiate(msgPrefab);
-        //msgClone.transform.SetParent(msgParentPanel);
-        //msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 2);
+        if (msg == "") return;
+        GameObject msgClone = Instantiate(msgPrefab);
+        msgClone.transform.SetParent(msgParentPanel);
+        msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 1);
 
-        //var currentPos = msgClone.transform.position;
-        //msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
+        Vector3 currentPos = msgClone.transform.position;
+        msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
 
-        //var scale = new Vector3(1, 1, 1);
-        //msgClone.transform.localScale = scale;
+        Vector3 scale = new Vector3(1, 1, 1);
+        msgClone.transform.localScale = scale;
 
-        //msgClone.GetComponent<Message>().showMessage(msg);
+        msgClone.GetComponent<Message>().showMessage(msg); //NEED USERNAME.........
 
-        currentMesage.text = msg;
+        //currentMesage.text = msg; //Deprecated Workaround, do not use
 
     }
 
     public string getURL()
     {
-        return serverURL + GetIP();
+        return serverURL + HUD.S.GetIP();
     }
 
-    string requestStreamIdentifier()
-    {
-        return "";
-    }
-
-    //listen for and display incoming messages
-    public void chatListen()
-    {
-       
-    }
-
-    ////called when a new message is received
-    //public void readmessage(SocketIOEvent e)
+    //string requestStreamIdentifier()
     //{
-    //    print("MESSAGE RECEIVED");
-    //    Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-    //    string msg = e.data.ToDictionary()["message"];
-    //    setMessage(msg);
+    //    return "";
     //}
 
-    //bool chatConnected()
-    //{
-    //    if (Time.time - timeOfLastCheck > checkConnectionDelay)
-    //    {
-    //        timeOfLastCheck = Time.time;
-    //        if (socket.IsConnected)
-    //        {
-    //            titleText.text = "Viewer Chat";
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            titleText.text = "Chat Disconnected";
-    //            return false;
-    //        }
-    //    }
-    //    return true;
-    //}
+    /*DEPRECATED SOCKET STUFF. DO NOT ENABLE.
+    //called when a new message is received
+    public void readmessage(SocketIOEvent e)
+    {
+        print("MESSAGE RECEIVED");
+        Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
+        string msg = e.data.ToDictionary()["message"];
+        setMessage(msg);
+    }
 
+    bool chatConnected()
+    {
+        if (Time.time - timeOfLastCheck > checkConnectionDelay)
+        {
+            timeOfLastCheck = Time.time;
+            if (socket.IsConnected)
+            {
+                titleText.text = "Viewer Chat";
+                return true;
+            }
+            else
+            {
+                titleText.text = "Chat Disconnected";
+                return false;
+            }
+        }
+        return true;
+    }
+    */
 
 
 }
