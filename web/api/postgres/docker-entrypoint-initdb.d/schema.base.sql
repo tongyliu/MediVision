@@ -5,6 +5,13 @@ CREATE SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create table schema
+CREATE TABLE users (
+  id         UUID PRIMARY KEY, -- User ID
+  username   TEXT NOT NULL,
+  password   TEXT NOT NULL, -- Password hash
+  created_at TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc')
+);
+
 CREATE TABLE streams (
   id             UUID PRIMARY KEY, -- Active stream ID
   created_at     TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc'),
