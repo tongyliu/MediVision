@@ -135,6 +135,14 @@ var BroadcasterPage = React.createClass({
     );
   },
 
+  componentDidMount: function() {
+    this.props.router.setRouteLeaveHook(this.props.route, function() {
+      if (this.state.streamActive) {
+        this._unpublishStream(true);
+      }
+    }.bind(this));
+  },
+
   _generateVideoUrl: function() {
     var baseUrl = 'http://' + this.state.streamInfo.ip;
     var queryString = qs.stringify({
@@ -182,11 +190,13 @@ var BroadcasterPage = React.createClass({
     }.bind(this));
   },
 
-  _unpublishStream: function() {
+  _unpublishStream: function(componentWillUnmount) {
     var endpointUrl = '/stream/' + this.state.streamId;
     r.delete(endpointUrl, function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
-        this.setState({ streamActive: false });
+        if (!componentWillUnmount) {
+          this.setState({ streamActive: false });
+        }
       } else {
         console.warn('API request returned error');
       }
