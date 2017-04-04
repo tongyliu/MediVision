@@ -113,7 +113,7 @@ var BroadcasterPage = React.createClass({
         <div>
           <ParentVideo
             streamId={this.state.streamId} src={videoUrl}
-            autoPlay={true} loop={true}
+            autoPlay={true} loop={true} ref="parentVideo"
           />
           <StreamDesc stream={this.state.streamInfo}/>
           <a
@@ -207,6 +207,7 @@ var BroadcasterPage = React.createClass({
       req.open('DELETE', config.API_URL + endpointUrl, false);
       req.send();
     }
+    this.refs.parentVideo.closeAllConnections();
   }
 });
 
