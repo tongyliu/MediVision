@@ -49,6 +49,10 @@ var ParentVideo = React.createClass({
     }.bind(this), delay);
   },
 
+  componentWillUnmount: function() {
+    this.closeAllConnections();
+  },
+
   _createStreamIfNeeded: function() {
     if (!this.stream || !this.stream.active) {
       if (this.refs.video.captureStream) {
@@ -127,6 +131,13 @@ var ParentVideo = React.createClass({
     var iceCandidate = new RTCIceCandidate(candidateStr);
     this.peerConnections[clientId].addIceCandidate(iceCandidate)
       .catch(logError);
+  },
+
+  closeAllConnections: function() {
+    for (var clientId in this.peerConnections) {
+      this.peerConnections[clientId].close();
+      delete this.peerConnections[clientId];
+    }
   }
 });
 

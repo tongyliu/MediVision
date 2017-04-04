@@ -113,7 +113,7 @@ var BroadcasterPage = React.createClass({
         <div>
           <ParentVideo
             streamId={this.state.streamId} src={videoUrl}
-            autoPlay={true} loop={true}
+            autoPlay={true} loop={true} ref="parentVideo"
           />
           <StreamDesc stream={this.state.streamInfo}/>
           <a
@@ -192,15 +192,22 @@ var BroadcasterPage = React.createClass({
 
   _unpublishStream: function(componentWillUnmount) {
     var endpointUrl = '/stream/' + this.state.streamId;
-    r.delete(endpointUrl, function(err, res, body) {
-      if (!err && res.statusCode == 200 && body['success']) {
-        if (!componentWillUnmount) {
+    if (!componentWillUnmount) {
+      r.delete(endpointUrl, function(err, res, body) {
+        if (!err && res.statusCode == 200 && body['success']) {
           this.setState({ streamActive: false });
+        } else {
+          console.warn('API request returned error');
         }
-      } else {
-        console.warn('API request returned error');
-      }
-    }.bind(this));
+      }.bind(this));
+    } else {
+      // If the component is going to unmount, we need to execute the request
+      // synchronously in order to ensure that it finishes before we exit
+      var req = new XMLHttpRequest();
+      req.open('DELETE', config.API_URL + endpointUrl, false);
+      req.send();
+    }
+    this.refs.parentVideo.closeAllConnections();
   }
 });
 
