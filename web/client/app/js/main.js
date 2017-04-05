@@ -28,6 +28,7 @@ var useBeforeUnload = History.useBeforeUnload;
 // Ensure that router lifecycle hooks get called even when the browser window
 // is refreshed or closed
 var browserHistory = useBeforeUnload(useRouterHistory(createHistory))();
+LoginManager.initWithHistory(browserHistory);
 
 var Page = React.createClass({
   render: function() {
