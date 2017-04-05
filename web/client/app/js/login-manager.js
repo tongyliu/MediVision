@@ -4,12 +4,14 @@
  * Global store for authentication state
  */
 
-var browserHistory = require('react-router').browserHistory;
-
 class _LoginManager {
   constructor() {
     this.token = null;
     this.userObj = true;
+  }
+
+  initWithHistory(history) {
+    this.browserHistory = history;
   }
 
   isLoggedIn() {
@@ -27,9 +29,20 @@ class _LoginManager {
   }
 
   logout() {
+    if (!this.browserHistory) {
+      this._showHistoryError('logout');
+      return;
+    }
     this.token = null;
     this.userObj = null;
-    browserHistory.replace('/');
+    this.browserHistory.replace('/');
+  }
+
+  _showHistoryError(fn) {
+    var msg = 'Warning: ' + fn + '() called without a valid history object. '
+              + 'This is a no-op. Check that LoginManager.initWithHistory() '
+              + 'was properly called.';
+    console.error(msg);
   }
 }
 
