@@ -75,6 +75,7 @@ def login():
     
     @apiSuccess {Boolean} success Indicate whether the user has been successfully logged in
     @apiSuccess {String} token User authentication token
+    @apiSuccess {String} user_id User's UUID
 
     @apiDescription This endpoint allows user to login with credentials
     """
@@ -103,6 +104,7 @@ def login():
                                        'exp': datetime.datetime.utcnow() + datetime.timedelta(
                                            minutes=30)},
                                       SERVER_SECRET, algorithm='HS256').decode('utf-8')
+            res['user_id'] = user_id
 
     fin(conn, cur)
     return jsonify(res)
@@ -131,12 +133,13 @@ def logout():
 
     try:
         jwt_token = request.headers['Authorization'][len('Bearer '):]
+        logging.info('Get jwt token: ' + jwt_token)
     except KeyError:
         res['detail'] = 'Invalid Authorization header'
         return jsonify(res)
 
     try:
-        payload = jwt.decode(jwt_token)
+        payload = jwt.decode(jwt_token, SERVER_SECRET, algorithms=['HS256'])
     except jwt.InvalidTokenError:
         res['detail'] = 'Invalid token'
         return jsonify(res)
