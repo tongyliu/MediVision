@@ -8,13 +8,15 @@ XXX Note: Authentication module is schduled for Omega release, so here it is a w
 import datetime
 
 import logging
-from flask import Blueprint, request, jsonify
 import os
 
+from flask import Blueprint, request, jsonify
+import jwt
 import bcrypt
+
 from utils.db_driver import get_cursor, fin
 from utils.utils import id_generator
-import jwt
+from relay_agent.decorators import requires_auth
 
 auth_pages = Blueprint('auth_pages', __name__)
 
@@ -33,6 +35,7 @@ def create_account():
     
     @apiParam {String} username Username
     @apiParam {String} password Password
+    @apiParam {String} name User's real name
 
     @apiSuccess {Boolean} success Indicate whether the user has been successfully created
     @apiSuccess {String} user_id User's UUID
@@ -42,6 +45,7 @@ def create_account():
     try:
         username = request.form['username']
         password = request.form['password']
+        name = request.form.get('name', 'Anonymous')
     except KeyError:
         return jsonify({'success': False, 'detail': 'Missing username or password'})
 
@@ -53,9 +57,9 @@ def create_account():
     pw_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
     stmt = "INSERT INTO users " \
-           "(id, username, password)" \
-           "VALUES (%s, %s, %s);"
-    data = (str(user_id), username, pw_hash.decode('utf-8'))
+           "(id, username, password, fullname)" \
+           "VALUES (%s, %s, %s, %s);"
+    data = (str(user_id), username, pw_hash.decode('utf-8'), name)
     cur.execute(stmt, data)
 
     fin(conn, cur)
@@ -76,6 +80,7 @@ def login():
     @apiSuccess {Boolean} success Indicate whether the user has been successfully logged in
     @apiSuccess {String} token User authentication token
     @apiSuccess {String} user_id User's UUID
+    @apiSuccess {String} name User's real name
 
     @apiDescription This endpoint allows user to login with credentials
     """
@@ -87,7 +92,7 @@ def login():
 
     conn, cur = get_cursor()
 
-    stmt = "SELECT id, password FROM users WHERE username = %s;"
+    stmt = "SELECT id, password, fullname FROM users WHERE username = %s;"
     data = (username,)
     cur.execute(stmt, data)
     result = cur.fetchone()
@@ -96,6 +101,7 @@ def login():
     if result is not None:
         user_id = result[0]
         pw_hash = result[1]
+        name = result[2]
 
         if bcrypt.checkpw(password.encode('utf-8'), pw_hash.encode('utf-8')):
             res['success'] = True
@@ -105,12 +111,14 @@ def login():
                                            minutes=30)},
                                       SERVER_SECRET, algorithm='HS256').decode('utf-8')
             res['user_id'] = user_id
+            res['name'] = name
 
     fin(conn, cur)
     return jsonify(res)
 
 
 @auth_pages.route('/logout', methods=['POST'])
+@requires_auth
 def logout():
     """
     @api {post} /auth/logout User Logout

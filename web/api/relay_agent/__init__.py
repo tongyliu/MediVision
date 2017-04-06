@@ -1,4 +1,5 @@
 import logging
+import os
 from sys import stdout
 
 from flask import Flask
@@ -21,7 +22,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-socketio = SocketIO(app, engineio_logger=True)
+socketio = SocketIO(app, engineio_logger=False, logger=False)
 
 api_prefix = '/api'
 socket_prefix = api_prefix + '/socket'

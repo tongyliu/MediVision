@@ -7,6 +7,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Create table schema
 CREATE TABLE users (
   id         UUID PRIMARY KEY, -- User ID
+  fullname   TEXT NOT NULL,
   username   TEXT NOT NULL,
   password   TEXT NOT NULL, -- Password hash
   created_at TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc')
@@ -46,3 +47,7 @@ VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-0000000
 
 INSERT INTO streams (id, stream_name, streamer_ip)
 VALUES ('00000000-0000-0000-0000-000000000003', 'test_stream', '10.0.0.2');
+
+INSERT INTO users (id, fullname, username, password)
+VALUES ('00000000-0000-0000-0000-000000000004', 'Jim Harbaugh', 'a',
+        '$2b$12$vW2U8u17jsP.XQPg/.n0J.hlkrN/35AwHGk8cMCvuFFAb0fAxC.LS')
