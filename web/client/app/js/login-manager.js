@@ -18,6 +18,10 @@ class _LoginManager {
     return !!this.userObj && !!this.token;
   }
 
+  getUser() {
+    return this.userObj;
+  }
+
   setRedirectUrl(url) {
     console.log('redirect url set to', url);
     this.redirectUrl = url;

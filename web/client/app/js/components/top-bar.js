@@ -8,11 +8,9 @@ var TopBar = React.createClass({
 
     switch (LoginManager.isLoggedIn()) {
       case true:
-        // TODO: Replace with actual user name
-        var welcomeMsg = 'Hello, World!';
         content = (
           <div>
-            <h5 className="welcome-msg text-muted">{welcomeMsg}</h5>
+            <h5 className="welcome-msg text-muted">{this._getWelcomeMsg()}</h5>
             <a className="btn btn-danger" onClick={this._handleLogout}>
               Sign Out
             </a>
@@ -55,6 +53,12 @@ var TopBar = React.createClass({
         </div>
       </div>
     );
+  },
+
+  _getWelcomeMsg: function() {
+    var user = LoginManager.getUser();
+    var firstName = user.name.split(' ')[0];
+    return 'Hi, ' + firstName + '!';
   },
 
   _handleLogout: function() {
