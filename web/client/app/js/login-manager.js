@@ -15,7 +15,7 @@ class _LoginManager {
   }
 
   isLoggedIn() {
-    return !!this.userObj;
+    return !!this.userObj && !!this.token;
   }
 
   setRedirectUrl(url) {
@@ -26,6 +26,16 @@ class _LoginManager {
   clearRedirectUrl() {
     console.log('redirect url cleared');
     this.redirectUrl = null;
+  }
+
+  login(user, token) {
+    if (!this.browserHistory) {
+      this._showHistoryError('login');
+      return;
+    }
+    this.userObj = user;
+    this.token = token;
+    this.browserHistory.replace(this.redirectUrl || '/');
   }
 
   logout() {
