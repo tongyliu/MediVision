@@ -53,13 +53,13 @@ public class ChatBoxMain : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        chatImage = gameObject.GetComponent<Image>();
         //set viewer chat to transparent
         Color c = chatImage.color;
         c.a = full_transparency;
         chatImage.color = c;
 
         Debug.Log("Chatbox: MAIN HAS STARTED");
-        chatImage = gameObject.GetComponent<Image>();
         Debug.Assert(chatImage);
     }
 
