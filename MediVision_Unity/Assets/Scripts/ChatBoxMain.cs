@@ -38,6 +38,11 @@ public class ChatBoxMain : MonoBehaviour
     public Transform msgParentPanel;
     public Text titleText;
 
+    public float Fade_Delay = 3f;
+    public float Fade_Speed = .01f;
+
+    Image chatImage;
+
     float timeOfLastCheck = 0;
     bool alreadyCalled = false; //used for coroutine initialization
 
@@ -46,12 +51,15 @@ public class ChatBoxMain : MonoBehaviour
     void Start()
     {
         Debug.Log("Chatbox: MAIN HAS STARTED");
+        chatImage = gameObject.GetComponent<Image>();
+        Debug.Assert(chatImage);
     }
 
     // Update is called once per frame
     void Update()
     {
         beginCoroutine();
+        fadeControl();
     }
 
     void beginCoroutine()
@@ -163,6 +171,43 @@ public class ChatBoxMain : MonoBehaviour
     public string getURL()
     {
         return serverURL + HUD.S.GetIP();
+    }
+
+    //an update function
+    void fadeControl()
+    {
+        if (HUD.S.captureOn())
+        {
+            fadeIn();
+        }
+        else
+        {
+            fadeOut();
+        }
+    }
+
+    //an update function when disconnected
+    void fadeOut()
+    {
+        if (chatImage.color.a > 0)
+        {
+            Color c = chatImage.color;
+            c.a = c.a - Fade_Speed;
+            if (c.a < 0) c.a = 0;
+            chatImage.color = c;
+        }
+    }
+
+    //an update function when connected
+    void fadeIn()
+    {
+        if (chatImage.color.a < 1)
+        {
+            Color c = chatImage.color;
+            c.a = c.a + Fade_Speed;
+            if (c.a > 1) c.a = 1;
+            chatImage.color = c;
+        }
     }
 
     //string requestStreamIdentifier()
