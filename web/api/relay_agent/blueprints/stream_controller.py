@@ -7,6 +7,7 @@ from datetime import datetime
 import logging
 from flask import Blueprint, jsonify, request
 
+from relay_agent.decorators import requires_auth
 from utils.db_driver import get_cursor, fin
 from utils.utils import id_generator
 
@@ -20,6 +21,12 @@ from utils.utils import id_generator
 """
 
 stream_pages = Blueprint('stream_pages', __name__)
+
+
+@stream_pages.before_request
+@requires_auth
+def auth_protect():
+    return
 
 
 @stream_pages.route('/', methods=['POST'])
@@ -76,6 +83,7 @@ def get_stream(stream_id):
 
     @apiSuccess {Boolean} success Indicate whether this request success
     @apiSuccess {Number} client_id Indicate which client it is contacting this live stream
+     @apiSuccess {Boolean} is_active Indicate whether this stream is active
     @apiSuccess {[Stream](#api-Custom_types-ObjectStream)} stream Detail information about the stream.
 
     @apiDescription This endpoint returns information about requested stream
@@ -84,7 +92,8 @@ def get_stream(stream_id):
 
     conn, cur = get_cursor()
 
-    stmt = 'SELECT client_counter, stream_name, stream_short, stream_desc FROM streams WHERE id=%s;'
+    stmt = 'SELECT client_counter, stream_name, stream_short, stream_desc, active FROM streams ' \
+           'WHERE id=%s;'
     cur.execute(stmt, (stream_id,))
     result = cur.fetchone()
 
@@ -99,6 +108,7 @@ def get_stream(stream_id):
         res['client_id'] = counter
         res['stream'] = {'stream_id': stream_id, 'stream_name': result[1],
                          'stream_short_desc': result[2], 'stream_full_desc': result[3]}
+        res['is_active'] = result[4]
 
     fin(conn, cur)
 
@@ -120,7 +130,8 @@ def get_all_streams():
     """
     conn, cur = get_cursor()
 
-    stmt = "SELECT id, stream_name, stream_short, stream_desc, active FROM streams;"
+    stmt = "SELECT id, stream_name, stream_short, stream_desc, active FROM streams " \
+           "WHERE active = TRUE;"
     cur.execute(stmt)
     results = cur.fetchall()
     fin(conn, cur)
@@ -151,7 +162,7 @@ def query_by_ip(ip_addr):
     logging.info('Receive request for /stream/query/' + ip_addr)
     conn, cur = get_cursor()
 
-    stmt = "SELECT id, active FROM streams WHERE streamer_ip = %s;"
+    stmt = "SELECT id, active FROM streams WHERE streamer_ip = %s ORDER BY created_at DESC LIMIT 1;"
     data = (ip_addr,)
     cur.execute(stmt, data)
     result = cur.fetchone()
@@ -182,7 +193,6 @@ def delete_stream(stream_id):
     :param stream_id:
     :return:
     """
-    """TODO: Authentication"""
     conn, cur = get_cursor()
 
     """TODO: Input validation"""

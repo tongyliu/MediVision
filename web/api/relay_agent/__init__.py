@@ -45,6 +45,7 @@ def handle_chat(msg):
         - to:
         - text:
         - id:
+        - from:
     """
     # Store in DB
     logging.info('Receive chat message: {to: %s, text: %s}' % (msg['to'], msg['text']))
