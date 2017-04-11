@@ -29,25 +29,27 @@ CREATE TABLE chat (
   stream_id   UUID REFERENCES streams (id) ON DELETE CASCADE, -- Chat room number
   content     TEXT, -- Actual message of this chat
   created_at  TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc'),
-  viewer_chat BOOL  -- Whether this chat msg is viewer-viewer chat or doctor-viewer chat
+  viewer_chat BOOL, -- Whether this chat msg is viewer-viewer chat or doctor-viewer chat
+  sender      UUID REFERENCES users (id) ON DELETE CASCADE
 );
 
 -- Add test accounts
 INSERT INTO streams (id, stream_name, streamer_ip, active)
 VALUES ('00000000-0000-0000-0000-000000000000', 'test_stream', '10.0.0.1', TRUE);
 
-INSERT INTO chat (id, stream_id, content, viewer_chat)
-VALUES
-  ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'viewer only',
-   TRUE);
+INSERT INTO users (id, fullname, username, password)
+VALUES ('00000000-0000-0000-0000-000000000001', 'Jim Harbaugh', 'a',
+        '$2b$12$vW2U8u17jsP.XQPg/.n0J.hlkrN/35AwHGk8cMCvuFFAb0fAxC.LS'); -- Hash for 1
 
-INSERT INTO chat (id, stream_id, content, viewer_chat)
-VALUES ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000',
-        'viewer and streamer', FALSE);
+INSERT INTO chat (id, stream_id, content, viewer_chat, sender)
+VALUES
+  ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000', 'viewer only',
+   TRUE, '00000000-0000-0000-0000-000000000001');
+
+INSERT INTO chat (id, stream_id, content, viewer_chat, sender)
+VALUES ('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000000',
+        'viewer and streamer', FALSE, '00000000-0000-0000-0000-000000000001');
 
 INSERT INTO streams (id, stream_name, streamer_ip)
 VALUES ('00000000-0000-0000-0000-000000000003', 'test_stream', '10.0.0.2');
 
-INSERT INTO users (id, fullname, username, password)
-VALUES ('00000000-0000-0000-0000-000000000004', 'Jim Harbaugh', 'a',
-        '$2b$12$vW2U8u17jsP.XQPg/.n0J.hlkrN/35AwHGk8cMCvuFFAb0fAxC.LS')

@@ -142,6 +142,7 @@ def query_by_ip(ip_addr):
      @apiParam {String} streamer_ip Streamer IP address to be queried
 
      @apiSuccess {String} stream_id Corresponding Stream ID with that IP address
+     @apiSuccess {Boolean} is_active Indicate whether this stream is active
      @apiSuccess {Boolean} success Indicate whether this request success
 
      @apiDescription This endpoint takes an IP as a query parameter. It looks up in the database
@@ -150,12 +151,12 @@ def query_by_ip(ip_addr):
     logging.info('Receive request for /stream/query/' + ip_addr)
     conn, cur = get_cursor()
 
-    stmt = "SELECT id FROM streams WHERE streamer_ip = %s;"
+    stmt = "SELECT id, active FROM streams WHERE streamer_ip = %s;"
     data = (ip_addr,)
     cur.execute(stmt, data)
     result = cur.fetchone()
     if result is not None:
-        response = {'success': True, 'stream_id': result[0]}
+        response = {'success': True, 'stream_id': result[0], 'is_active': result[1]}
     else:
         response = {'success': False}
 
