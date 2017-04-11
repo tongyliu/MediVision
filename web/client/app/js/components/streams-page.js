@@ -6,11 +6,8 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
+var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
 var classNames = require('classnames');
-var request = require('request');
-var config = require('../config');
-
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
 
 var StreamsPage = React.createClass({
   getInitialState: function() {
@@ -59,7 +56,7 @@ var StreamsPage = React.createClass({
   },
 
   componentDidMount: function() {
-    r.get('/stream/', function(err, res, body) {
+    new ApiRequestWithAuth().get('/stream/', function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
         this.setState({ streams: body['active_streams'] });
       } else {

@@ -6,11 +6,9 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var request = require('request');
+var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
 var io = require('socket.io-client');
 var config = require('../config');
-
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
 var socket = io.connect(config.SOCKET_URL);
 
 var Message = React.createClass({
@@ -62,7 +60,7 @@ var ChatBox = React.createClass({
   },
 
   componentDidMount: function() {
-    r.get({ url: '/chat/' + this.props.streamId, qs: {
+    new ApiRequestWithAuth().get({ url: '/chat/' + this.props.streamId, qs: {
       viewer_only: this.props.viewerOnly
     }}, function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {

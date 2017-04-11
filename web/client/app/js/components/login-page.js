@@ -6,10 +6,7 @@
 
 var React = require('react');
 var LoginManager = require('../login-manager');
-var request = require('request');
-var config = require('../config');
-
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
+var ApiRequest = require('../utils/api-utils').ApiRequest;
 
 var LoginPage = React.createClass({
   getInitialState: function() {
@@ -67,7 +64,7 @@ var LoginPage = React.createClass({
   _handleSubmit: function(evt) {
     evt.preventDefault();
 
-    r.post({ url: '/auth/login', form: {
+    new ApiRequest().post({ url: '/auth/login', form: {
       username: this.state.username,
       password: this.state.password
     }}, function(err, res, body) {

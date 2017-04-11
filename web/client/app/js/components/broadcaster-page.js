@@ -5,15 +5,16 @@
  */
 
 var React = require('react');
+var LoginManager = require('../login-manager');
 var ParentVideo = require('./webrtc-video').ParentVideo;
 var StreamDesc = require('./stream-desc');
+var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
 var Address4 = require('ip-address').Address4;
-var classNames = require('classnames');
+
 var request = require('request');
 var qs = require('qs');
+var classNames = require('classnames');
 var config = require('../config');
-
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
 
 var StreamForm = React.createClass({
   getInitialState: function() {
@@ -155,7 +156,7 @@ var BroadcasterPage = React.createClass({
   },
 
   _submitStreamInfo: function(info) {
-    r.post({ url: '/stream/', form: {
+    new ApiRequestWithAuth().post({ url: '/stream/', form: {
       stream_name: info.title,
       stream_short_desc: info.tagline,
       stream_full_desc: info.desc,
@@ -181,7 +182,7 @@ var BroadcasterPage = React.createClass({
 
   _publishStream: function() {
     var endpointUrl = '/stream/activate/' + this.state.streamId;
-    r.put(endpointUrl, function(err, res, body) {
+    new ApiRequestWithAuth().put(endpointUrl, function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
         this.setState({ streamActive: true });
       } else {
@@ -193,7 +194,7 @@ var BroadcasterPage = React.createClass({
   _unpublishStream: function(componentWillUnmount) {
     var endpointUrl = '/stream/' + this.state.streamId;
     if (!componentWillUnmount) {
-      r.delete(endpointUrl, function(err, res, body) {
+      new ApiRequestWithAuth().delete(endpointUrl, function(err, res, body) {
         if (!err && res.statusCode == 200 && body['success']) {
           this.setState({ streamActive: false });
         } else {
@@ -204,7 +205,9 @@ var BroadcasterPage = React.createClass({
       // If the component is going to unmount, we need to execute the request
       // synchronously in order to ensure that it finishes before we exit
       var req = new XMLHttpRequest();
+      var jwt = 'Bearer ' + LoginManager.getToken();
       req.open('DELETE', config.API_URL + endpointUrl, false);
+      req.setRequestHeader('Authorization', jwt);
       req.send();
     }
     this.refs.parentVideo.closeAllConnections();

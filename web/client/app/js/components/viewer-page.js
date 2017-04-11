@@ -8,10 +8,7 @@ var React = require('react');
 var ChildVideo = require('./webrtc-video').ChildVideo;
 var ChatBox = require('./chat-box');
 var StreamDesc = require('./stream-desc');
-var request = require('request');
-var config = require('../config');
-
-var r = request.defaults({ baseUrl: config.API_URL, json: true });
+var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
 
 var ViewerPage = React.createClass({
   getInitialState: function() {
@@ -63,7 +60,8 @@ var ViewerPage = React.createClass({
       return;
     }
 
-    r.get('/stream/' + queryParams['stream_id'], function(err, res, body) {
+    var endpointUrl = '/stream/' + queryParams['stream_id'];
+    new ApiRequestWithAuth().get(endpointUrl, function(err, res, body) {
       if (!err && res.statusCode == 200 && body['success']) {
         var stream = this._convertStream(body['stream']);
         this.setState({ id: body['client_id'], stream: stream });
