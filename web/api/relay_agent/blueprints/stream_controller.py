@@ -23,13 +23,8 @@ from utils.utils import id_generator
 stream_pages = Blueprint('stream_pages', __name__)
 
 
-@stream_pages.before_request
-@requires_auth
-def auth_protect():
-    return
-
-
 @stream_pages.route('/', methods=['POST'])
+@requires_auth
 def create_stream():
     """
     @api {post} /stream/ Create Stream
@@ -179,6 +174,7 @@ def query_by_ip(ip_addr):
 
 
 @stream_pages.route('/<stream_id>', methods=['DELETE'])
+@requires_auth
 def delete_stream(stream_id):
     """
     @api {delete} /stream/:stream_id Delete Stream
@@ -205,6 +201,7 @@ def delete_stream(stream_id):
 
 
 @stream_pages.route('/activate/<stream_id>', methods=['GET', 'PUT'])
+@requires_auth
 def activate_stream(stream_id):
     """
     @api {get, put} /stream/activate/:stream_id Activate Stream
