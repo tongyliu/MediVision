@@ -54,7 +54,8 @@ var AuthenticatedPage = React.createClass({
 
   componentDidMount: function() {
     if (!LoginManager.isLoggedIn()) {
-      LoginManager.setRedirectUrl(this.props.location.pathname);
+      var url = this.props.location.pathname + this.props.location.search;
+      LoginManager.setRedirectUrl(url);
       this.props.router.replace('/login');
     }
   }
