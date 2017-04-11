@@ -41,6 +41,7 @@ public class ChatBoxMain : MonoBehaviour
 
     public float Fade_Delay = 3f;
     public float Fade_Speed = .01f;
+    public float full_transparency = .2f; //alpha = 100%
 
     Image chatImage;
 
@@ -52,6 +53,11 @@ public class ChatBoxMain : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //set viewer chat to transparent
+        Color c = chatImage.color;
+        c.a = full_transparency;
+        chatImage.color = c;
+
         Debug.Log("Chatbox: MAIN HAS STARTED");
         chatImage = gameObject.GetComponent<Image>();
         Debug.Assert(chatImage);
@@ -129,21 +135,24 @@ public class ChatBoxMain : MonoBehaviour
             }
             else
             {
+                Debug.Log("Chatbox: got a response.");
                 chat = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
                 //are there new messages?
                 if (chat.chat_messages.Length > numMessages)
                 {
+                    Debug.Log("Chatbox: found " + (chat.chat_messages.Length - numMessages) + " new messages");
                     //generate from oldest of the new messages to the newest
-                    int number_of_new_messages = 0;
                     for (int i = numMessages; i < chat.chat_messages.Length; ++i)
                     {
+                        Debug.Log("Chatbox: message is:");
+                        Debug.Log(chat.chat_messages[i].chat_content);
                         //string user = chat.chat_messages[i].user; USER...................................................................
                         string msg = chat.chat_messages[i].chat_content;
                         //setMessage(user, msg);.........................................................................
                         setMessage("", msg); //DELETE ME WHEN USERS ARE WORKING
-                        number_of_new_messages++;
+                        numMessages++;
                     }
-                    numMessages += number_of_new_messages;
+                    
                 }
                 //if (chat.chat_messages.Length > 0)
                 //{
@@ -210,11 +219,11 @@ public class ChatBoxMain : MonoBehaviour
     //an update function when connected
     void fadeIn()
     {
-        if (chatImage.color.a < 1)
+        if (chatImage.color.a < full_transparency)
         {
             Color c = chatImage.color;
             c.a = c.a + Fade_Speed;
-            if (c.a > 1) c.a = 1;
+            if (c.a > full_transparency) c.a = full_transparency;
             chatImage.color = c;
         }
     }
