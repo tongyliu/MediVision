@@ -18,6 +18,7 @@ public class ChatResponse
     public class ChatMessage
     {
         public string chat_id;
+        public string user; //MAKE SURE THIS IS CORRECT........................................................
         public string chat_content;
         public string chat_created_at;
     }
@@ -44,7 +45,8 @@ public class ChatBoxMain : MonoBehaviour
     Image chatImage;
 
     float timeOfLastCheck = 0;
-    bool alreadyCalled = false; //used for coroutine initialization
+    bool coroutinesOn = false; //used for coroutine initialization
+    int numMessages = 0; //total number of unique chat messages received
 
 
     // Use this for initialization
@@ -58,29 +60,31 @@ public class ChatBoxMain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        beginCoroutine();
+        monitorCoroutine();
         fadeControl();
     }
 
-    void beginCoroutine()
+    void monitorCoroutine()
     {
-        if (HUD.S.captureOn() && !alreadyCalled)
+        if (HUD.S.captureOn() && !coroutinesOn)
         {
             Debug.Log("Chatbox: CALLED COROUTINE TO GET STREAM ID");
             StartCoroutine(GetText());
-            alreadyCalled = true;
+            coroutinesOn = true;
+        }
+        if (!HUD.S.captureOn() && coroutinesOn) //when disconnected
+        {
+            StopAllCoroutines();
+            coroutinesOn = false;
+            Debug.Log("Chatbox: I just murdered my coroutines");
         }
     }
 
     IEnumerator GetText()
     {
         Debug.Log("Chatbox: IN GET TEXT");
-
-
         Debug.Log("Chatbox: WAIING FOR 5 SECONDS...");
         yield return new WaitForSeconds(5f);
-
-
         string url = getURL();
         Debug.Log(url);
 
@@ -107,20 +111,15 @@ public class ChatBoxMain : MonoBehaviour
     }
 
     //MUST MODIFY TO GET USERNAME
-    public IEnumerator getMessage(string id) {
-
-        while (true) {
-
+    public IEnumerator getMessage(string id)
+    {
+        while (true)
+        {
             Debug.Log("Chatbox: IN GETMESSAGE()");
-
-
             yield return new WaitForSeconds(5f);
-
             string url = "http://34.198.160.73/api/chat/" + id + "?viewer_only=false";
             Debug.Log("Chatbox: " + url);
-
             ChatResponse chat;
-
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.Send();
 
@@ -131,22 +130,32 @@ public class ChatBoxMain : MonoBehaviour
             else
             {
                 chat = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
-
-                if (chat.chat_messages.Length > 0)
+                //are there new messages?
+                if (chat.chat_messages.Length > numMessages)
                 {
-                    string message = chat.chat_messages[chat.chat_messages.Length - 1].chat_content;
-
-                    Debug.Log("Chatbox: CHAT MESSAGE: ");
-                    Debug.Log("Chatbox: " + message);
-
-                    setMessage(message);
+                    //generate from oldest of the new messages to the newest
+                    int number_of_new_messages = 0;
+                    for (int i = numMessages; i < chat.chat_messages.Length; ++i)
+                    {
+                        string user = chat.chat_messages[i].user;
+                        string msg = chat.chat_messages[i].chat_content;
+                        setMessage(user, msg);
+                        number_of_new_messages++;
+                    }
+                    numMessages += number_of_new_messages;
                 }
-
+                //if (chat.chat_messages.Length > 0)
+                //{
+                //string message = chat.chat_messages[chat.chat_messages.Length - 1].chat_content;
+                //Debug.Log("Chatbox: CHAT MESSAGE: ");
+                //Debug.Log("Chatbox: " + message);
+                //setMessage(message);
+                //}
             }
-        }
+        }//end while(true)
     }
 
-    public void setMessage(string msg)
+    public void setMessage(string user, string msg)
     {
 
         Debug.Log("Chatbox: IN SET MESSAGE");
@@ -162,10 +171,9 @@ public class ChatBoxMain : MonoBehaviour
         Vector3 scale = new Vector3(1, 1, 1);
         msgClone.transform.localScale = scale;
 
-        msgClone.GetComponent<Message>().showMessage(msg); //NEED USERNAME.........
+        msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
 
         //currentMesage.text = msg; //Deprecated Workaround, do not use
-
     }
 
     public string getURL()
