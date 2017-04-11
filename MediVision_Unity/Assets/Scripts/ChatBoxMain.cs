@@ -18,7 +18,7 @@ public class ChatResponse
     public class ChatMessage
     {
         public string chat_id;
-        public string user; //MAKE SURE THIS IS CORRECT........................................................
+        //public string user; //MAKE SURE THIS IS CORRECT........................................................
         public string chat_content;
         public string chat_created_at;
     }
@@ -137,9 +137,10 @@ public class ChatBoxMain : MonoBehaviour
                     int number_of_new_messages = 0;
                     for (int i = numMessages; i < chat.chat_messages.Length; ++i)
                     {
-                        string user = chat.chat_messages[i].user;
+                        //string user = chat.chat_messages[i].user; USER...................................................................
                         string msg = chat.chat_messages[i].chat_content;
-                        setMessage(user, msg);
+                        //setMessage(user, msg);.........................................................................
+                        setMessage("", msg); //DELETE ME WHEN USERS ARE WORKING
                         number_of_new_messages++;
                     }
                     numMessages += number_of_new_messages;
