@@ -13,6 +13,7 @@ from time import mktime
 @apiParam {String} chat_id Chat message UUID.
 @apiParam {String} chat_content Chat message content.
 @apiParam {Timestamp} chat_created_at Timestamp this message is created at.
+@apiParam {String} sender Sender's fullname.
 """
 
 chat_pages = Blueprint('chat_pages', __name__)
