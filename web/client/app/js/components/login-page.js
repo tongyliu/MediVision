@@ -14,6 +14,16 @@ var LoginPage = React.createClass({
   },
 
   render: function() {
+    var redirectionAlert = null;
+    if (LoginManager.hasRedirectUrl()) {
+      redirectionAlert = (
+        <div className="alert alert-warning" role="alert">
+          <strong>Wait!</strong> That page requires authentication.
+          Please sign to proceed.
+        </div>
+      );
+    }
+
     var loginFailedAlert = null;
     if (this.state.loginFailed) {
       loginFailedAlert = (
@@ -27,6 +37,7 @@ var LoginPage = React.createClass({
     return (
       <div className="login-page">
         <h1>Sign In</h1>
+        {redirectionAlert}
         {loginFailedAlert}
         <div className="panel panel-default no-border">
           <div className="panel-body">
@@ -53,6 +64,12 @@ var LoginPage = React.createClass({
         </div>
       </div>
     );
+  },
+
+  componentDidMount: function() {
+    if (LoginManager.isLoggedIn()) {
+      this.props.router.replace('/');
+    }
   },
 
   _onChange: function(key, evt) {

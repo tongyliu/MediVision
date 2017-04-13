@@ -1,4 +1,11 @@
+/*
+ * login-page.js
+ *
+ * Page for users to sign up with new accounts
+ */
+
 var React = require('react');
+var LoginManager = require('../login-manager');
 
 var RegisterPage = React.createClass({
   getInitialState: function() {
@@ -55,6 +62,12 @@ var RegisterPage = React.createClass({
         </div>
       </div>
     );
+  },
+
+  componentDidMount: function() {
+    if (LoginManager.isLoggedIn()) {
+      this.props.router.replace('/');
+    }
   },
 
   _onChange: function(key, evt) {
