@@ -161,8 +161,8 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
 --- !u!114 &114878518755550360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -256,5 +256,5 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 125.9, y: 0}
-  m_SizeDelta: {x: 243.8, y: 0}
+  m_SizeDelta: {x: 243.8, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
