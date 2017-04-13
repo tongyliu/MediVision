@@ -8,9 +8,11 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
 var TextUtils = require('../utils/text-utils');
+var ColorMapper = require('../utils/color-mapper');
 var LoginManager = require('../login-manager');
 
 var io = require('socket.io-client');
+var classNames = require('classNames');
 var config = require('../config');
 var socket = io.connect(config.SOCKET_URL);
 
@@ -20,7 +22,10 @@ var Message = React.createClass({
 
     return (
       <div className="chat-box__message list-group-item">
-        <div className="chat-box__message-icon">
+        <div className={classNames(
+          'chat-box__message-icon',
+          ColorMapper.colorFor(name)
+        )}>
           {TextUtils.getInitials(name)}
           <div className="chat-box__message-name">
             {name}

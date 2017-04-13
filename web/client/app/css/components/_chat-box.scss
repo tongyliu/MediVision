@@ -61,6 +61,12 @@
 		font-size: 20px;
 		cursor: default;
 
+		&.red { background-color: $red }
+		&.green { background-color: $green }
+		&.blue { background-color: $blue }
+		&.cyan { background-color: $cyan }
+		&.yellow { background-color: $yellow }
+
 		&:hover > div {
 			opacity: 1;
 			z-index: 1;
