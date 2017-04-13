@@ -104,6 +104,8 @@ public class HUD : MonoBehaviour
     IEnumerator checkStreamLive()
     {
 
+        yield return new WaitForSeconds(5f);
+
         string url = serverURL + GetIP();
         
         while (true)
