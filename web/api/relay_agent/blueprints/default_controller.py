@@ -26,7 +26,7 @@ def default_landing():
 def hidden_landing():
     """
     @api {post, get} /hidden Hidden Landing Page
-    @apiName LandingPage
+    @apiName HiddenLandingPage
     @apiGroup Default
 
     @apiDescription This is the hidden landing page. Requires authentication.

@@ -26,8 +26,8 @@ def get_history(stream_id):
     @apiName GetChatHistory
     @apiGroup Chat
 
-    @apiParam {String=['true', 'false']} viewer_only If this is viewer-viewer chat, it must be TRUE. If it is
-    viewer-streamer chat, set it to be FALSE.
+    @apiParam {String=true, false} viewer_only If this is viewer-viewer chat, it must be TRUE. 
+    If it is viewer-streamer chat, set it to be FALSE.
     @apiParam {String} stream_id Stream ID
 
     @apiSuccess {Boolean} success Indicate whether this request success

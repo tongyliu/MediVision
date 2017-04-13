@@ -191,7 +191,6 @@ def delete_stream(stream_id):
     """
     conn, cur = get_cursor()
 
-    """TODO: Input validation"""
     stmt = "UPDATE streams SET active = FALSE WHERE id = %s"
     data = (stream_id,)
     cur.execute(stmt, data)
