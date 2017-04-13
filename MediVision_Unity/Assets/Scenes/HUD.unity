@@ -328,8 +328,8 @@ GameObject:
   - component: {fileID: 361102408}
   - component: {fileID: 361102407}
   - component: {fileID: 361102406}
-  - component: {fileID: 361102405}
   - component: {fileID: 361102410}
+  - component: {fileID: 361102405}
   m_Layer: 5
   m_Name: Chat_panel
   m_TagString: Untagged
@@ -372,7 +372,7 @@ MonoBehaviour:
   serverURL: http://34.198.160.73/api/stream/query/
   stream_id: 
   checkConnectionDelay: 3
-  msgPrefab: {fileID: 696921162}
+  msgPrefab: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9, type: 2}
   msgParentPanel: {fileID: 361102404}
   titleText: {fileID: 1581492273}
   Fade_Delay: 3
@@ -509,7 +509,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 127.900024
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -559,7 +559,7 @@ Prefab:
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 125.9
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -653,7 +653,7 @@ Prefab:
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 127.900024
       objectReference: {fileID: 0}
     - target: {fileID: 224118964369250636, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -707,7 +707,7 @@ Prefab:
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 125.9
       objectReference: {fileID: 0}
     - target: {fileID: 224946664677755714, guid: 08bf54483fb250346b11c66b8be528c9,
         type: 2}
@@ -913,11 +913,6 @@ MonoBehaviour:
   disconnectionMessage: Connection lost
   no_ip_message: Could not be retrieved
   debug_capture_on: 1
---- !u!1 &696921162 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1513393013730664, guid: 08bf54483fb250346b11c66b8be528c9,
-    type: 2}
-  m_PrefabInternal: {fileID: 471524086}
 --- !u!1001 &976442468
 Prefab:
   m_ObjectHideFlags: 0
