@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class HUD : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class HUD : MonoBehaviour
     float timeDisconnected = -1f;
     Color original_IP_text_color;
     bool streamOn = false;
+    bool isCaptureOn = false;
+    string serverURL = "http://3.198.160.73/api/stream/query/";
 
     private void Awake()
     {
@@ -84,14 +87,41 @@ public class HUD : MonoBehaviour
         {
             return true;
         }
-        #if NETFX_CORE
-            Windows.Media.Capture.AppCapture current = Windows.Media.Capture.AppCapture.GetForCurrentView();
-            if (current.IsCapturingVideo)
-            {
-                return true;
-            }
-        #endif
-        return false;
+        //#if NETFX_CORE
+        //    Windows.Media.Capture.AppCapture current = Windows.Media.Capture.AppCapture.GetForCurrentView();
+        //    if (current.IsCapturingVideo)
+        //    {
+        //        return true;
+        //    }
+        //#endif
+        //return false;
+
+
+        StartCoroutine(checkStreamLive());
+
+        return isCaptureOn;
+
+    }
+
+    IEnumerator checkStreamLive()
+    {
+
+        string url = serverURL + GetIP();
+
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        yield return www.Send();
+
+
+        if (www.isError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
+            isCaptureOn = stream_info.is_active;
+        }
+
     }
 
     void checkConnection()
