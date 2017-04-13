@@ -29,7 +29,7 @@ public class ChatResponse
 
 public class ChatBoxMain : MonoBehaviour
 {
-    public string serverURL = "http://3.198.160.73/api/stream/query/";
+    public string serverURL = "http://34.198.160.73/api/stream/query/";
     public string stream_id = "";
     public float checkConnectionDelay = 3; //seconds
     public GameObject msgPrefab;

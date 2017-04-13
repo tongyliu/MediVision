@@ -638,7 +638,7 @@ MonoBehaviour:
   IP_Fade_Speed: 0.01
   disconnectionMessage: Connection lost
   no_ip_message: Could not be retrieved
-  debug_capture_on: 1
+  debug_capture_on: 0
 --- !u!1001 &976442468
 Prefab:
   m_ObjectHideFlags: 0
