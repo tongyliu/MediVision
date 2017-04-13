@@ -15,10 +15,22 @@ var request = require('request');
 var qs = require('qs');
 var classNames = require('classnames');
 var config = require('../config');
+var _ = require('lodash');
 
 var StreamForm = React.createClass({
   getInitialState: function() {
-    return { ip: '', title: '', tagline: '', desc: '' };
+    return {
+      ip: '',
+      title: '',
+      tagline: '',
+      desc: '',
+      ipValid: true,
+      isValid: false
+    };
+  },
+
+  componentWillMount: function() {
+    this._checkIpAddr = _.debounce(this._checkIpAddr, 300);
   },
 
   render: function() {
@@ -28,7 +40,9 @@ var StreamForm = React.createClass({
         <div className="panel panel-default no-border">
           <div className="panel-body">
             <form onSubmit={this._handleSubmit}>
-              <div className="form-group">
+              <div className={classNames('form-group', {
+                'has-error': !this.state.ipValid
+              })}>
                 <label htmlFor="ip-input">HoloLens IP Address</label>
                 <input
                   id="ip-input" className="form-control" type="text"
@@ -67,7 +81,9 @@ var StreamForm = React.createClass({
                   value={this.state.desc}
                 />
               </div>
-              <button className="btn btn-lg btn-success">
+              <button
+                className="btn btn-lg btn-success"
+                disabled={!this.state.isValid}>
                 Next
               </button>
             </form>
@@ -80,21 +96,27 @@ var StreamForm = React.createClass({
   _onChange: function(key, evt) {
     var updateHash = {};
     updateHash[key] = evt.target.value;
-    this.setState(updateHash);
+    if (key == 'ip') {
+      this.setState(updateHash, this._checkIpAddr);
+    } else {
+      this.setState(updateHash, this._validate);
+    }
+  },
+
+  _checkIpAddr: function() {
+    var addr = new Address4(this.state.ip);
+    var ipValid = addr.isValid() || !this.state.ip;
+    this.setState({ ipValid: ipValid }, this._validate);
+  },
+
+  _validate: function() {
+    var isValid = this.state.title && this.state.ip && this.state.ipValid;
+    this.setState({ isValid: isValid });
   },
 
   _handleSubmit: function(evt) {
     evt.preventDefault();
-    if (this._validate()) {
-      this.props.onSubmit(this.state);
-    } else {
-      alert('Invalid IP address, try again.');
-    }
-  },
-
-  _validate: function() {
-    var addr = new Address4(this.state.ip);
-    return addr.isValid();
+    this.props.onSubmit(this.state);
   }
 });
 
