@@ -12,11 +12,10 @@ public class HUD : MonoBehaviour
     public Text IP_box;
     public float IP_Fade_Delay = 3f;
     public float IP_Fade_Speed = .01f;
-    public bool debug_capture_on = false;
     public string disconnectionMessage = "Stream Disconnected";
     public string no_ip_message = "Could not be retrieved";
+    public bool debug_capture_on = false;
 
-    public bool ___________________________;
     //internal variables    
     float timeFirstConnected = -1f;
     float timeDisconnected = -1f;

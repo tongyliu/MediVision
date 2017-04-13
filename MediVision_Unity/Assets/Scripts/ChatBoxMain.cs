@@ -29,22 +29,21 @@ public class ChatResponse
 public class ChatBoxMain : MonoBehaviour
 {
     public string serverURL = "http://3.198.160.73/api/stream/query/";
-    //UPDATE WITH SERVER URL
     public string stream_id = "";
-    //public string IP;
-    //public string urlSuffix = "socket.io/?EIO=4&transport=websocket";
     public float checkConnectionDelay = 3; //seconds
     public GameObject msgPrefab;
-    //public Text currentMesage;
     public Transform msgParentPanel;
     public Text titleText;
 
     public float Fade_Delay = 3f;
     public float Fade_Speed = .01f;
-    public float full_transparency = .2f; //alpha = 100%
+    public float full_transparency = 1f; //alpha = 100%
 
+    public bool debug_mode = false;
+    public bool receive_debug_message = false;
+
+    //internal variables
     CanvasGroup chat;
-
     float timeOfLastCheck = 0;
     bool coroutinesOn = false; //used for coroutine initialization
     int numMessages = 0; //total number of unique chat messages received
@@ -57,8 +56,11 @@ public class ChatBoxMain : MonoBehaviour
         //set viewer chat to transparent
         chat.alpha = 0;
 
-        Debug.Log("Chatbox: MAIN HAS STARTED");
-        Debug.Assert(chat);
+        if (debug_mode)
+        {
+            Debug.Log("Chatbox: MAIN HAS STARTED");
+            Debug.Assert(chat);
+        }        
     }
 
     // Update is called once per frame
@@ -72,7 +74,7 @@ public class ChatBoxMain : MonoBehaviour
     {
         if (HUD.S.captureOn() && !coroutinesOn)
         {
-            Debug.Log("Chatbox: CALLED COROUTINE TO GET STREAM ID");
+            if (debug_mode) Debug.Log("Chatbox: CALLED COROUTINE TO GET STREAM ID");
             StartCoroutine(GetText());
             coroutinesOn = true;
         }
@@ -80,14 +82,14 @@ public class ChatBoxMain : MonoBehaviour
         {
             StopAllCoroutines();
             coroutinesOn = false;
-            Debug.Log("Chatbox: I just murdered my coroutines");
+            if (debug_mode) Debug.Log("Chatbox: I just murdered my coroutines");
         }
     }
 
     IEnumerator GetText()
     {
-        Debug.Log("Chatbox: IN GET TEXT");
-        Debug.Log("Chatbox: WAIING FOR 5 SECONDS...");
+        if (debug_mode) Debug.Log("Chatbox: IN GET TEXT");
+        if (debug_mode) Debug.Log("Chatbox: WAIING FOR 5 SECONDS...");
         yield return new WaitForSeconds(5f);
         string url = getURL();
         Debug.Log(url);
@@ -101,14 +103,14 @@ public class ChatBoxMain : MonoBehaviour
         }
         else
         {
-            Debug.Log("Chatbox: PARSING JSON...");
+            if (debug_mode) Debug.Log("Chatbox: PARSING JSON...");
             StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
 
-            Debug.Log("Chatbox: RAW JSON STRING: ");
-            Debug.Log(www.downloadHandler.text);
+            if (debug_mode) Debug.Log("Chatbox: RAW JSON STRING: ");
+            if (debug_mode) Debug.Log(www.downloadHandler.text);
 
-            Debug.Log("Chatbox: STREAM ID: ");
-            Debug.Log(stream_info.stream_id.ToString());
+            if (debug_mode) Debug.Log("Chatbox: STREAM ID: ");
+            if (debug_mode) Debug.Log(stream_info.stream_id.ToString());
 
             StartCoroutine(getMessage(stream_info.stream_id));
         }
@@ -119,10 +121,10 @@ public class ChatBoxMain : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("Chatbox: IN GETMESSAGE()");
+            if (debug_mode) Debug.Log("Chatbox: IN GETMESSAGE()");
             yield return new WaitForSeconds(5f);
             string url = "http://34.198.160.73/api/chat/" + id + "?viewer_only=false";
-            Debug.Log("Chatbox: " + url);
+            if (debug_mode) Debug.Log("Chatbox: " + url);
             ChatResponse chat;
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.Send();
@@ -133,17 +135,17 @@ public class ChatBoxMain : MonoBehaviour
             }
             else
             {
-                Debug.Log("Chatbox: got a response.");
+                if (debug_mode) Debug.Log("Chatbox: got a response.");
                 chat = JsonUtility.FromJson<ChatResponse>(www.downloadHandler.text);
                 //are there new messages?
                 if (chat.chat_messages.Length > numMessages)
                 {
-                    Debug.Log("Chatbox: found " + (chat.chat_messages.Length - numMessages) + " new messages");
+                    if (debug_mode) Debug.Log("Chatbox: found " + (chat.chat_messages.Length - numMessages) + " new messages");
                     //generate from oldest of the new messages to the newest
                     for (int i = numMessages; i < chat.chat_messages.Length; ++i)
                     {
-                        Debug.Log("Chatbox: message is:");
-                        Debug.Log(chat.chat_messages[i].chat_content);
+                        if (debug_mode) Debug.Log("Chatbox: message is:");
+                        if (debug_mode) Debug.Log(chat.chat_messages[i].chat_content);
                         //string user = chat.chat_messages[i].user; USER...................................................................
                         string msg = chat.chat_messages[i].chat_content;
                         //setMessage(user, msg);.........................................................................
@@ -159,7 +161,7 @@ public class ChatBoxMain : MonoBehaviour
     public void setMessage(string user, string msg)
     {
 
-        Debug.Log("Chatbox: IN SET MESSAGE");
+        if (debug_mode) Debug.Log("Chatbox: IN SET MESSAGE");
 
         if (msg == "") return;
         GameObject msgClone = Instantiate(msgPrefab);
