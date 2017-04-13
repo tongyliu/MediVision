@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE users (
   id         UUID PRIMARY KEY, -- User ID
   fullname   TEXT NOT NULL,
-  username   TEXT NOT NULL,
+  username   TEXT NOT NULL UNIQUE ,
   password   TEXT NOT NULL, -- Password hash
   created_at TIMESTAMP DEFAULT (now() AT TIME ZONE 'utc')
 );
