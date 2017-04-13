@@ -13,6 +13,7 @@ var socket = io.connect(config.SOCKET_URL);
 
 function logError(err) {
   console.error(err);
+  alert('Whoops! An unexpected error occured. Check the console for details.');
 }
 
 var allowedVideoProps = [
