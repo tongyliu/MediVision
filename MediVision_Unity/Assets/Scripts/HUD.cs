@@ -36,6 +36,7 @@ public class HUD : MonoBehaviour
         IP_box.text = "IP: " + GetIP();
         original_IP_text_color = Color.white;
         original_IP_text_color.a = 1;
+        StartCoroutine(checkStreamLive());
     }
 	
 	// Update is called once per frame
@@ -96,9 +97,6 @@ public class HUD : MonoBehaviour
         //#endif
         //return false;
 
-
-        StartCoroutine(checkStreamLive());
-
         return isCaptureOn;
 
     }
@@ -107,20 +105,31 @@ public class HUD : MonoBehaviour
     {
 
         string url = serverURL + GetIP();
-
-        UnityWebRequest www = UnityWebRequest.Get(url);
-        yield return www.Send();
-
-
-        if (www.isError)
+        
+        while (true)
         {
-            Debug.Log(www.error);
+            yield return new WaitForSeconds(2f);
+
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
+                isCaptureOn = stream_info.is_active;
+
+                Debug.Log("IS_ACTIVE: ");
+                Debug.Log(isCaptureOn.ToString());
+            }
+
+
         }
-        else
-        {
-            StreamID stream_info = JsonUtility.FromJson<StreamID>(www.downloadHandler.text);
-            isCaptureOn = stream_info.is_active;
-        }
+
+        
 
     }
 
