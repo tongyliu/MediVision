@@ -11,6 +11,7 @@ import os
 from flask import Blueprint, request, jsonify
 import jwt
 import bcrypt
+import psycopg2
 
 from utils.db_driver import get_cursor, fin
 from utils.utils import id_generator
@@ -37,15 +38,18 @@ def create_account():
 
     @apiSuccess {Boolean} success Indicate whether the user has been successfully created
     @apiSuccess {String} user_id User's UUID
+    @apiSuccess {String} token User authentication token
 
     @apiDescription This endpoint allows user to create account
     """
+    res = {'success': False}
     try:
         username = request.form['username']
         password = request.form['password']
         name = request.form.get('name', 'Anonymous')
     except KeyError:
-        return jsonify({'success': False, 'detail': 'Missing username or password'})
+        res['detail'] = 'Missing username or password'
+        return jsonify(res)
 
     user_id = id_generator()
     conn, cur = get_cursor()
@@ -58,11 +62,16 @@ def create_account():
            "(id, username, password, fullname)" \
            "VALUES (%s, %s, %s, %s);"
     data = (str(user_id), username, pw_hash.decode('utf-8'), name)
-    cur.execute(stmt, data)
+    try:
+        cur.execute(stmt, data)
+    except psycopg2.IntegrityError:
+        # Duplicate key
+        res['detail'] = 'Username exists.'
+        return jsonify(res)
 
     fin(conn, cur)
 
-    return jsonify({'success': True, 'user_id': user_id})
+    return jsonify({'success': True, 'user_id': str(user_id), 'token': get_token(user_id)})
 
 
 @auth_pages.route('/login', methods=['POST'])
@@ -103,16 +112,21 @@ def login():
 
         if bcrypt.checkpw(password.encode('utf-8'), pw_hash.encode('utf-8')):
             res['success'] = True
-            res['token'] = jwt.encode({'user_id': user_id,
-                                       'iat': datetime.datetime.utcnow(),
-                                       'exp': datetime.datetime.utcnow() + datetime.timedelta(
-                                           minutes=30)},
-                                      SERVER_SECRET, algorithm='HS256').decode('utf-8')
+            res['token'] = get_token(user_id)
             res['user_id'] = user_id
             res['name'] = name
 
     fin(conn, cur)
     return jsonify(res)
+
+
+def get_token(user_id):
+    user_id = str(user_id)
+    return jwt.encode({'user_id': user_id,
+                       'iat': datetime.datetime.utcnow(),
+                       'exp': datetime.datetime.utcnow() + datetime.timedelta(
+                           minutes=30)},
+                      SERVER_SECRET, algorithm='HS256').decode('utf-8')
 
 
 @auth_pages.route('/logout', methods=['POST'])
