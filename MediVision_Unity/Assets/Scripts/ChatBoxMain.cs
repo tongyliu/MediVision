@@ -43,7 +43,7 @@ public class ChatBoxMain : MonoBehaviour
     public float Fade_Speed = .01f;
     public float full_transparency = .2f; //alpha = 100%
 
-    Image chatImage;
+    CanvasGroup chat;
 
     float timeOfLastCheck = 0;
     bool coroutinesOn = false; //used for coroutine initialization
@@ -53,14 +53,12 @@ public class ChatBoxMain : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        chatImage = gameObject.GetComponent<Image>();
+        chat = gameObject.GetComponent<CanvasGroup>();
         //set viewer chat to transparent
-        Color c = chatImage.color;
-        c.a = full_transparency;
-        chatImage.color = c;
+        chat.alpha = 0;
 
         Debug.Log("Chatbox: MAIN HAS STARTED");
-        Debug.Assert(chatImage);
+        Debug.Assert(chat);
     }
 
     // Update is called once per frame
@@ -154,13 +152,6 @@ public class ChatBoxMain : MonoBehaviour
                     }
                     
                 }
-                //if (chat.chat_messages.Length > 0)
-                //{
-                //string message = chat.chat_messages[chat.chat_messages.Length - 1].chat_content;
-                //Debug.Log("Chatbox: CHAT MESSAGE: ");
-                //Debug.Log("Chatbox: " + message);
-                //setMessage(message);
-                //}
             }
         }//end while(true)
     }
@@ -175,15 +166,13 @@ public class ChatBoxMain : MonoBehaviour
         msgClone.transform.SetParent(msgParentPanel);
         msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 1);
 
-        Vector3 currentPos = msgClone.transform.position;
-        msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
+        //Vector3 currentPos = msgClone.transform.position;
+        //msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
 
-        Vector3 scale = new Vector3(1, 1, 1);
-        msgClone.transform.localScale = scale;
+        //Vector3 scale = new Vector3(1, 1, 1);
+        //msgClone.transform.localScale = scale;
 
         msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
-
-        //currentMesage.text = msg; //Deprecated Workaround, do not use
     }
 
     public string getURL()
@@ -207,61 +196,21 @@ public class ChatBoxMain : MonoBehaviour
     //an update function when disconnected
     void fadeOut()
     {
-        if (chatImage.color.a > 0)
+        if (chat.alpha > 0)
         {
-            Color c = chatImage.color;
-            c.a = c.a - Fade_Speed;
-            if (c.a < 0) c.a = 0;
-            chatImage.color = c;
+            chat.alpha = chat.alpha - Fade_Speed;
+            if (chat.alpha < 0) chat.alpha = 0;
         }
     }
 
     //an update function when connected
     void fadeIn()
     {
-        if (chatImage.color.a < full_transparency)
+        if (chat.alpha < full_transparency)
         {
-            Color c = chatImage.color;
-            c.a = c.a + Fade_Speed;
-            if (c.a > full_transparency) c.a = full_transparency;
-            chatImage.color = c;
+            chat.alpha = chat.alpha + Fade_Speed;
+            if (chat.alpha > full_transparency) chat.alpha = full_transparency;
         }
     }
-
-    //string requestStreamIdentifier()
-    //{
-    //    return "";
-    //}
-
-    /*DEPRECATED SOCKET STUFF. DO NOT ENABLE.
-    //called when a new message is received
-    public void readmessage(SocketIOEvent e)
-    {
-        print("MESSAGE RECEIVED");
-        Debug.Log(string.Format("[name: {0}, data: {1}]", e.name, e.data));
-        string msg = e.data.ToDictionary()["message"];
-        setMessage(msg);
-    }
-
-    bool chatConnected()
-    {
-        if (Time.time - timeOfLastCheck > checkConnectionDelay)
-        {
-            timeOfLastCheck = Time.time;
-            if (socket.IsConnected)
-            {
-                titleText.text = "Viewer Chat";
-                return true;
-            }
-            else
-            {
-                titleText.text = "Chat Disconnected";
-                return false;
-            }
-        }
-        return true;
-    }
-    */
-
 
 }

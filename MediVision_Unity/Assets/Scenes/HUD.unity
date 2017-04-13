@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 361102407}
   - component: {fileID: 361102406}
   - component: {fileID: 361102405}
+  - component: {fileID: 361102410}
   m_Layer: 5
   m_Name: Chat_panel
   m_TagString: Untagged
@@ -374,6 +375,9 @@ MonoBehaviour:
   msgPrefab: {fileID: 696921162}
   msgParentPanel: {fileID: 361102404}
   titleText: {fileID: 1581492273}
+  Fade_Delay: 3
+  Fade_Speed: 0.01
+  full_transparency: 1
 --- !u!114 &361102406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,6 +446,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 361102403}
+--- !u!225 &361102410
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 361102403}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &471524086
 Prefab:
   m_ObjectHideFlags: 0
@@ -921,7 +936,8 @@ MonoBehaviour:
   IP_Fade_Delay: 3
   IP_Fade_Speed: 0.01
   debug_capture_on: 0
-  disconnectionMessage: Could not retrieve
+  disconnectionMessage: Connection lost
+  no_ip_message: Could not be retrieved
   ___________________________: 0
 --- !u!1 &696921162 stripped
 GameObject:

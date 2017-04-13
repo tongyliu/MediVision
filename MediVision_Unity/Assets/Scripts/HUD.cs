@@ -14,6 +14,7 @@ public class HUD : MonoBehaviour
     public float IP_Fade_Speed = .01f;
     public bool debug_capture_on = false;
     public string disconnectionMessage = "Stream Disconnected";
+    public string no_ip_message = "Could not be retrieved";
 
     public bool ___________________________;
     //internal variables    
@@ -52,7 +53,7 @@ public class HUD : MonoBehaviour
             return hostNames[hostNames.Count - 1].ToString();
 
         #endif
-        return "Could not be retrieved";
+        return no_ip_message;
     }
 
     void ip_fade()
@@ -119,7 +120,7 @@ public class HUD : MonoBehaviour
             Time.time - timeDisconnected > 4)
         {
             IP_box.enabled = true;
-            IP_box.text = "IP:" + GetIP();
+            IP_box.text = "IP: " + GetIP();
             original_IP_text_color = Color.white;
             original_IP_text_color.a = 1;
             timeDisconnected = -1;
