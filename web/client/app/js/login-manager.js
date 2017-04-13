@@ -5,25 +5,22 @@
  */
 
 class _LoginManager {
-  constructor() {
-    this.token = null;
-    this.userObj = true;
-  }
-
   initWithHistory(history) {
     this.browserHistory = history;
   }
 
   isLoggedIn() {
-    return !!this.userObj && !!this.token;
+    var userObj = localStorage.getItem('userObj');
+    var token = localStorage.getItem('token');
+    return !!userObj && !!token;
   }
 
   getUser() {
-    return this.userObj;
+    return JSON.parse(localStorage.getItem('userObj'));
   }
 
   getToken() {
-    return this.token;
+    return localStorage.getItem('token');
   }
 
   hasRedirectUrl() {
@@ -31,12 +28,10 @@ class _LoginManager {
   }
 
   setRedirectUrl(url) {
-    console.log('redirect url set to', url);
     this.redirectUrl = url;
   }
 
   clearRedirectUrl() {
-    console.log('redirect url cleared');
     this.redirectUrl = null;
   }
 
@@ -45,8 +40,10 @@ class _LoginManager {
       this._showHistoryError('login');
       return;
     }
-    this.userObj = user;
-    this.token = token;
+
+    this.redirectUrl = null;
+    localStorage.setItem('userObj', JSON.stringify(user));
+    localStorage.setItem('token', token);
     this.browserHistory.replace(this.redirectUrl || '/');
   }
 
@@ -55,8 +52,9 @@ class _LoginManager {
       this._showHistoryError('logout');
       return;
     }
-    this.token = null;
-    this.userObj = null;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userObj');
     this.browserHistory.replace('/');
   }
 

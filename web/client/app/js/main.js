@@ -57,6 +57,23 @@ var AuthenticatedPage = React.createClass({
       var url = this.props.location.pathname + this.props.location.search;
       LoginManager.setRedirectUrl(url);
       this.props.router.replace('/login');
+    } else {
+      // Listen for storage change events so we know if we've been logged out
+      // from another tab
+      window.addEventListener('storage', this._onStorageChange);
+    }
+  },
+
+  componentWillUnmount: function() {
+    window.removeEventListener('storage', this._onStorageChange);
+  },
+
+  _onStorageChange: function(evt) {
+    // There are two events fired on logout, since there are two different
+    // keys that get modified -- only act on one of them
+    if (!LoginManager.isLoggedIn() && evt.key == 'token') {
+      alert('You have been logged out. Please sign in again to continue.');
+      this.props.router.replace('/');
     }
   }
 });
