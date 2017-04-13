@@ -9,6 +9,7 @@ public class StreamID
 {
     public string stream_id;
     public bool success;
+    public bool is_active;
 }
 
 [System.Serializable]
