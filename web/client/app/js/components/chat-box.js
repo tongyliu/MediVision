@@ -7,15 +7,28 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ApiRequestWithAuth = require('../utils/api-utils').ApiRequestWithAuth;
+var TextUtils = require('../utils/text-utils');
+var LoginManager = require('../login-manager');
+
 var io = require('socket.io-client');
 var config = require('../config');
 var socket = io.connect(config.SOCKET_URL);
 
 var Message = React.createClass({
   render: function() {
+    var name = this.props.name || 'Anonymous';
+
     return (
       <div className="chat-box__message list-group-item">
-        {this.props.text}
+        <div className="chat-box__message-icon">
+          {TextUtils.getInitials(name)}
+          <div className="chat-box__message-name">
+            {name}
+          </div>
+        </div>
+        <div className="chat-box__message-content">
+          {this.props.text}
+        </div>
       </div>
     );
   }
@@ -28,7 +41,7 @@ var ChatBox = React.createClass({
 
   render: function() {
     var messages = this.state.messages.map(function(msg) {
-      return <Message key={msg.id} text={msg.text}/>
+      return <Message key={msg.id} text={msg.text} name={msg.sender}/>
     });
 
     messages.push(<div ref='messagesEnd' key='messagesEnd'></div>);
@@ -94,8 +107,11 @@ var ChatBox = React.createClass({
     evt.preventDefault();
 
     if (this.state.currentMessage) {
+      var currentUser = LoginManager.getUser();
       socket.emit('chat', {
         to: this._getRoomId(),
+        from: currentUser.id,
+        sender: currentUser.name,
         text: this.state.currentMessage
       });
       this.setState({ currentMessage: '' });
@@ -116,7 +132,8 @@ var ChatBox = React.createClass({
     return msgArr.map(function(rawMsg) {
       return {
         id: rawMsg['chat_id'],
-        text: rawMsg['chat_content']
+        text: rawMsg['chat_content'],
+        sender: rawMsg['sender']
       }
     });
   }

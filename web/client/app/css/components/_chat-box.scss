@@ -28,5 +28,67 @@
 		width: 100%;
 		background-color: $white;
 		border-top: 1px solid $grey;
+
+		.btn {
+			margin-top: 0;
+		}
+	}
+
+	&__message {
+		// Use ghost element to vertically center children
+		&:before {
+			content: '';
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+		}
+	}
+
+	$icon-size: 44px;
+
+	&__message-icon {
+		display: inline-block;
+		vertical-align: middle;
+		height: $icon-size;
+		width: $icon-size;
+		border-radius: 100%;
+		background-color: grey;
+		color: $white;
+		line-height: $icon-size;
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 900;
+		font-size: 20px;
+		cursor: default;
+
+		&:hover > div {
+			opacity: 1;
+			z-index: 1;
+		}
+	}
+
+	&__message-name {
+		opacity: 0;
+		position: absolute;
+		top: 50%;
+		left: 65px;
+		transform: translateY(-50%);
+		background-color: black;
+		color: white;
+		padding: 8px 10px;
+		border-radius: 4px;
+		font-size: 14px;
+		line-height: 14px;
+		text-transform: none;
+		box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+		transition: 0.1s ease opacity;
+		z-index: -1;
+	}
+
+	&__message-content {
+		display: inline-block;
+		vertical-align: middle;
+		width: calc(100% - #{$icon-size});
+		padding-left: 12px;
 	}
 }

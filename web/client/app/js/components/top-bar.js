@@ -1,6 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var LoginManager = require('../login-manager');
+var TextUtils = require('../utils/text-utils');
 
 var TopBar = React.createClass({
   render: function() {
@@ -57,7 +58,7 @@ var TopBar = React.createClass({
 
   _getWelcomeMsg: function() {
     var user = LoginManager.getUser();
-    var firstName = user.name.split(' ')[0];
+    var firstName = TextUtils.getFirstName(user.name);
     return 'Hi, ' + firstName + '!';
   },
 
