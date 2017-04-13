@@ -40,13 +40,16 @@ public class ChatBoxMain : MonoBehaviour
     public float full_transparency = 1f; //alpha = 100%
 
     public bool debug_mode = false;
-    public bool receive_debug_message = false;
+    public bool receive_debug_messages = false;
 
     //internal variables
     CanvasGroup chat;
     float timeOfLastCheck = 0;
     bool coroutinesOn = false; //used for coroutine initialization
     int numMessages = 0; //total number of unique chat messages received
+
+    float timeDebugLastReceived = 0f;
+    float debugMessageDelay = 3; //seconds
 
 
     // Use this for initialization
@@ -68,17 +71,18 @@ public class ChatBoxMain : MonoBehaviour
     {
         monitorCoroutine();
         fadeControl();
+        if (receive_debug_messages) sendDebugMessage();
     }
 
     void monitorCoroutine()
     {
-        if (HUD.S.captureOn() && !coroutinesOn)
+        if (HUD.S.captureOn() && !coroutinesOn && !HUD.S.debug_capture_on)
         {
             if (debug_mode) Debug.Log("Chatbox: CALLED COROUTINE TO GET STREAM ID");
             StartCoroutine(GetText());
             coroutinesOn = true;
         }
-        if (!HUD.S.captureOn() && coroutinesOn) //when disconnected
+        if (!HUD.S.captureOn() && coroutinesOn && !HUD.S.debug_capture_on) //when disconnected
         {
             StopAllCoroutines();
             coroutinesOn = false;
@@ -166,13 +170,13 @@ public class ChatBoxMain : MonoBehaviour
         if (msg == "") return;
         GameObject msgClone = Instantiate(msgPrefab);
         msgClone.transform.SetParent(msgParentPanel);
-        msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 1);
+        //msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 1);
 
-        //Vector3 currentPos = msgClone.transform.position;
-        //msgClone.transform.position = new Vector3(currentPos.x, currentPos.y, 1.75f);
+        Vector3 currentPos = msgClone.transform.localPosition;
+        msgClone.transform.localPosition = new Vector3(currentPos.x, currentPos.y, 0f);
 
-        //Vector3 scale = new Vector3(1, 1, 1);
-        //msgClone.transform.localScale = scale;
+        Vector3 scale = new Vector3(1, 1, 1);
+        msgClone.transform.localScale = scale;
 
         msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
     }
@@ -215,4 +219,24 @@ public class ChatBoxMain : MonoBehaviour
         }
     }
 
+    //an update function
+    void sendDebugMessage()
+    {
+        if (Time.time - timeDebugLastReceived > debugMessageDelay)
+        {
+            int seed = Random.Range(0, 3);
+            timeDebugLastReceived = Time.time;
+            switch (seed)
+            {
+                case 0: setMessage("Abraham Lincoln", "Everything on the internet is true");
+                    break;
+                case 1: setMessage("Jesus", "I'm Jesus");
+                    break;
+                case 2: setMessage("nub", "git gud");
+                    break;
+                default: setMessage("Dev", "Debug doesn't even work right, idiot");
+                    break;
+            }
+        }        
+    }
 }
