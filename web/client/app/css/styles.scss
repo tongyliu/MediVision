@@ -13,7 +13,7 @@ body {
 }
 
 .btn {
-	transition: 0.25s ease background-color;
+	transition: 0.25s ease background-color, 0.25s ease opacity;
 }
 
 // Bootstrap form style overrides
