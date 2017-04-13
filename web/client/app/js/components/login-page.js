@@ -19,7 +19,7 @@ var LoginPage = React.createClass({
       redirectionAlert = (
         <div className="alert alert-warning" role="alert">
           <strong>Wait!</strong> That page requires authentication.
-          Please sign to proceed.
+          Please sign in to proceed.
         </div>
       );
     }
