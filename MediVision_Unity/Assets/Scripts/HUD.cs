@@ -23,7 +23,7 @@ public class HUD : MonoBehaviour
     Color original_IP_text_color;
     bool streamOn = false;
     bool isCaptureOn = false;
-    string serverURL = "http://3.198.160.73/api/stream/query/";
+    string serverURL = "http://34.198.160.73/api/stream/query/";
 
     private void Awake()
     {
@@ -112,6 +112,9 @@ public class HUD : MonoBehaviour
 
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.Send();
+
+            Debug.Log("URL: ");
+            Debug.Log(url);
 
             if (www.isError)
             {
