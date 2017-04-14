@@ -224,12 +224,13 @@ var BroadcasterPage = React.createClass({
         }
       }.bind(this));
     } else {
-      // If the component is going to unmount, we need to execute the request
+      // If the component is going to unmount, have the request execute
       // synchronously in order to ensure that it finishes before we exit
+      // (not ideal, but it works for now)
       var req = new XMLHttpRequest();
-      var jwt = 'Bearer ' + LoginManager.getToken();
+      var token = LoginManager.getToken() || LoginManager.getLeavingToken();
       req.open('DELETE', config.API_URL + endpointUrl, false);
-      req.setRequestHeader('Authorization', jwt);
+      req.setRequestHeader('Authorization', 'Bearer ' + token);
       req.send();
     }
     this.refs.parentVideo.closeAllConnections();

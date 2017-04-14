@@ -23,6 +23,10 @@ class _LoginManager {
     return localStorage.getItem('token');
   }
 
+  getLeavingToken() {
+    return this.leavingToken; // See the logout method below
+  }
+
   hasRedirectUrl() {
     return !!this.redirectUrl;
   }
@@ -41,10 +45,10 @@ class _LoginManager {
       return;
     }
 
-    this.redirectUrl = null;
     localStorage.setItem('userObj', JSON.stringify(user));
     localStorage.setItem('token', token);
     this.browserHistory.replace(this.redirectUrl || '/');
+    this.redirectUrl = null;
   }
 
   logout() {
@@ -52,6 +56,11 @@ class _LoginManager {
       this._showHistoryError('logout');
       return;
     }
+
+    // Save a copy of the token in memory so that callbacks registered on
+    // page exit can still perform any necessary clean-up tasks using this
+    // token, even if we are leaving a page by logging out
+    this.leavingToken = localStorage.getItem('token');
 
     localStorage.removeItem('token');
     localStorage.removeItem('userObj');
