@@ -165,21 +165,27 @@ public class ChatBoxMain : MonoBehaviour
 
     public void setMessage(string user, string msg)
     {
-
         if (debug_mode) Debug.Log("Chatbox: IN SET MESSAGE");
-
         if (msg == "") return;
-        GameObject msgClone = Instantiate(msgPrefab);
-        msgClone.transform.SetParent(msgParentPanel);
-        //msgClone.transform.SetSiblingIndex(msgParentPanel.transform.childCount - 1);
+        GameObject msgClone = Instantiate(msgPrefab, msgParentPanel);
 
         Vector3 currentPos = msgClone.transform.localPosition;
         msgClone.transform.localPosition = new Vector3(currentPos.x, currentPos.y, 0f);
 
-        Vector3 scale = new Vector3(1, 1, 1);
+        Vector3 scale = new Vector3(0.9999998f, 0.9999998f, 0.9999998f);
         msgClone.transform.localScale = scale;
 
         msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
+        //if weird hololens bug happens, try uncommenting these:
+        /*
+        msgClone.transform.position = msgPrefab.transform.position;
+        msgClone.transform.localPosition = msgPrefab.transform.localPosition;
+        msgClone.transform.eulerAngles = msgPrefab.transform.eulerAngles;
+        msgClone.transform.localEulerAngles = msgPrefab.transform.localEulerAngles;
+        msgClone.transform.rotation = msgPrefab.transform.rotation;
+        msgClone.transform.localRotation = msgPrefab.transform.localRotation;
+        msgClone.transform.localScale = msgPrefab.transform.localScale;
+        */
     }
 
     public string getURL()
