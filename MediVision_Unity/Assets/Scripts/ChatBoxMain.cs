@@ -52,6 +52,10 @@ public class ChatBoxMain : MonoBehaviour
     float timeDebugLastReceived = 0f;
     float debugMessageDelay = 3; //seconds
 
+    string[] colors = { "red", "green", "blue", "cyan", "yellow" };    Dictionary<string, string> userToColor = new Dictionary<string, string>();
+    int colorIdx = 0;
+
+
 
     // Use this for initialization
     void Start()
@@ -174,9 +178,13 @@ public class ChatBoxMain : MonoBehaviour
         Vector3 scale = new Vector3(0.9999998f, 0.9999998f, 0.9999998f);
         msgClone.transform.localScale = scale;
 
-        msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
+
+        string color = getColor(user);
+
+        msgClone.GetComponent<Message>().showMessage(user, msg, color);
+
         //if weird hololens bug happens, try uncommenting these:
-        
+
         msgClone.transform.position = msgPrefab.transform.position;
         msgClone.transform.localPosition = msgPrefab.transform.localPosition;
         msgClone.transform.eulerAngles = msgPrefab.transform.eulerAngles;
@@ -190,6 +198,16 @@ public class ChatBoxMain : MonoBehaviour
     public string getURL()
     {
         return serverURL + HUD.S.GetIP();
+    }
+
+    public string getColor(string user)
+    {
+        if (!userToColor.ContainsKey(user))
+        {
+            userToColor[user] = colors[colorIdx];
+            colorIdx = (colorIdx + 1) % colors.Length;
+        }
+        return userToColor[user];
     }
 
     //an update function
