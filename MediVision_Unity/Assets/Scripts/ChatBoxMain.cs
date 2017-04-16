@@ -19,7 +19,7 @@ public class ChatResponse
     public class ChatMessage
     {
         public string chat_id;
-        //public string user; //MAKE SURE THIS IS CORRECT........................................................
+        public string sender; //MAKE SURE THIS IS CORRECT........................................................
         public string chat_content;
         public string chat_created_at;
     }
@@ -151,10 +151,9 @@ public class ChatBoxMain : MonoBehaviour
                     {
                         if (debug_mode) Debug.Log("Chatbox: message is:");
                         if (debug_mode) Debug.Log(chat.chat_messages[i].chat_content);
-                        //string user = chat.chat_messages[i].user; USER...................................................................
+                        string user = chat.chat_messages[i].sender;
                         string msg = chat.chat_messages[i].chat_content;
-                        //setMessage(user, msg);.........................................................................
-                        setMessage("", msg); //DELETE ME WHEN USERS ARE WORKING
+                        setMessage(user, msg);
                         numMessages++;
                     }
                     
@@ -177,7 +176,7 @@ public class ChatBoxMain : MonoBehaviour
 
         msgClone.GetComponent<Message>().showMessage(user, msg); //NEED USERNAME.........
         //if weird hololens bug happens, try uncommenting these:
-        /*
+        
         msgClone.transform.position = msgPrefab.transform.position;
         msgClone.transform.localPosition = msgPrefab.transform.localPosition;
         msgClone.transform.eulerAngles = msgPrefab.transform.eulerAngles;
@@ -185,7 +184,7 @@ public class ChatBoxMain : MonoBehaviour
         msgClone.transform.rotation = msgPrefab.transform.rotation;
         msgClone.transform.localRotation = msgPrefab.transform.localRotation;
         msgClone.transform.localScale = msgPrefab.transform.localScale;
-        */
+        
     }
 
     public string getURL()
