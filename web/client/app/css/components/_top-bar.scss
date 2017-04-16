@@ -17,7 +17,10 @@
 		line-height: $top-bar-height;
 		position: absolute;
 		left: 20px;
-		font-size: 20px;
+		font-size: 23px;
+		font-family: 'Lobster';
+		letter-spacing: 0.25px;
+		color: $blue;
 	}
 
 	&__right-side {
