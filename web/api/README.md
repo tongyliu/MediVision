@@ -51,10 +51,4 @@ Or by open
 
 ## Deployment
 
-The server instance is deployed on 
-[Amazon EC2](https://aws.amazon.com/ec2/) via the utilization 
-of [Docker](http://docker.com/). 
-
-The current address of the running server instance is 
-http://34.198.160.73/ (Only accessible though U-M networks) and
-you can verify it's up by visiting http://34.198.160.73/api/ .
+[Web Deployment Instructions](../README.md)

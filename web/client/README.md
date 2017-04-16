@@ -13,3 +13,7 @@ React.js client app code goes here.
 - To compile SCSS and JS, run `gulp` (these can also be done individually, with `gulp css` and `gulp js`)
 - To watch for changes and automatically recompile, run `gulp watch`
 - Run `node server.js` to start a local server
+
+## Deployment
+
+[Web Deployment Instructions](../README.md)

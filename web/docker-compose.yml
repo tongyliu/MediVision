@@ -2,18 +2,24 @@ version: "2"
 services:
   postgres:
     restart: always
-    build: postgres
+    build: api/postgres
     volumes:
       - /var/lib/postgresql
     expose:
       - "5432"
 
-  web:
+  server:
     restart: always
-    build: .
+    build: api
     ports:
-      - "80:5000"
+      - "8080:5000"
     links:
       - postgres:postgres
     env_file:
-      ./settings.env
+      ./api/settings.env
+
+  web:
+    restart: always
+    build: client
+    ports:
+      - "80:4000"
