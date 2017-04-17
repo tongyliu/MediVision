@@ -23,3 +23,5 @@ services:
     build: client
     ports:
       - "80:4000"
+    env_file:
+      ./client/settings.env

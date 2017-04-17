@@ -6,7 +6,7 @@ The overall instructions are the following:
 
 - Compile web app code into bundle.js
 
-    Switch to `cd ./client` directory and run `gulp`
+    Switch to `cd ./client` directory and run `NODE_ENV=production gulp && gulp minify-js`
 
 - Run docker-compose
 
