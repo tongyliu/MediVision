@@ -388,6 +388,8 @@ MonoBehaviour:
   stream_id: 
   checkConnectionDelay: 3
   msgPrefab: {fileID: 1513393013730664, guid: 089c19ea61d50b5419537cbd359781be, type: 2}
+  msgPrefab_Dummy: {fileID: 1513393013730664, guid: a8ea8191084d42d47a5cac436991ffe1,
+    type: 2}
   msgParentPanel: {fileID: 361102404}
   titleText: {fileID: 1581492273}
   Fade_Delay: 3
