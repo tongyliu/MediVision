@@ -10,6 +10,7 @@ public class HUD : MonoBehaviour
     static public HUD S;
 
     //inspector variables
+    public string serverURL = "http://34.198.160.73:8080/api/";
     public Text IP_box;
     public float IP_Fade_Delay = 3f;
     public float IP_Fade_Speed = .01f;
@@ -23,7 +24,7 @@ public class HUD : MonoBehaviour
     Color original_IP_text_color;
     bool streamOn = false;
     bool isCaptureOn = false;
-    string serverURL = "http://34.198.160.73:8080/api/stream/query/";
+    //string serverURL = "http://34.198.160.73:8080/api/stream/query/";
 
     private void Awake()
     {
@@ -98,26 +99,19 @@ public class HUD : MonoBehaviour
         //return false;
 
         return isCaptureOn;
-
     }
 
     IEnumerator checkStreamLive()
     {
-
         yield return new WaitForSeconds(5f);
-
-        string url = serverURL + GetIP();
-        
+        string url = serverURL + "stream/query/" + GetIP();        
         while (true)
         {
             yield return new WaitForSeconds(2f);
-
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.Send();
-
             Debug.Log("URL: ");
             Debug.Log(url);
-
             if (www.isError)
             {
                 Debug.Log(www.error);
@@ -130,12 +124,7 @@ public class HUD : MonoBehaviour
                 Debug.Log("IS_ACTIVE: ");
                 Debug.Log(isCaptureOn.ToString());
             }
-
-
         }
-
-        
-
     }
 
     void checkConnection()

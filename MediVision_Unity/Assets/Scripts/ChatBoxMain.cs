@@ -29,7 +29,9 @@ public class ChatResponse
 
 public class ChatBoxMain : MonoBehaviour
 {
-    public string serverURL = "http://34.198.160.73:8080/api/stream/query/";
+    public static ChatBoxMain S;
+
+    //public string serverURL = "http://34.198.160.73:8080/api/stream/query/";
     public string stream_id = "";
     public float checkConnectionDelay = 3; //seconds
     public GameObject msgPrefab;
@@ -59,6 +61,7 @@ public class ChatBoxMain : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        S = this;
         chat = gameObject.GetComponent<CanvasGroup>();
         //set viewer chat to transparent
         chat.alpha = 0;
@@ -130,7 +133,8 @@ public class ChatBoxMain : MonoBehaviour
         {
             if (debug_mode) Debug.Log("Chatbox: IN GETMESSAGE()");
             yield return new WaitForSeconds(5f);
-            string url = "http://34.198.160.73:8080/api/chat/" + id + "?viewer_only=false";
+            //string url = "http://34.198.160.73:8080/api/chat/" + id + "?viewer_only=false";
+            string url = HUD.S.serverURL + "chat/" + id + "?viewer_only=false";
             if (debug_mode) Debug.Log("Chatbox: " + url);
             ChatResponse chat;
             UnityWebRequest www = UnityWebRequest.Get(url);
@@ -195,7 +199,7 @@ public class ChatBoxMain : MonoBehaviour
 
     public string getURL()
     {
-        return serverURL + HUD.S.GetIP();
+        return HUD.S.serverURL + "stream/query/" + HUD.S.GetIP();
     }
 
     public string getColor(string user)
