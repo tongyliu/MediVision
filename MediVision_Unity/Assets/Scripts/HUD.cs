@@ -23,7 +23,7 @@ public class HUD : MonoBehaviour
     Color original_IP_text_color;
     bool streamOn = false;
     bool isCaptureOn = false;
-    string serverURL = "http://34.198.160.73/api/stream/query/";
+    string serverURL = "http://34.198.160.73:8080/api/stream/query/";
 
     private void Awake()
     {
