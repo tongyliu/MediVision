@@ -18,8 +18,10 @@ var StreamsPage = React.createClass({
     var streamComponents = null;
 
     if (Array.isArray(this.state.streams)) {
-      streamComponents = this.state.streams.map(function(stream) {
-        return (
+      streamComponents = [];
+      for (var i = 0; i < this.state.streams.length; ++i) {
+        var stream = this.state.streams[i];
+        streamComponents.push(
           <div key={stream['stream_id']} className="col-sm-6 col-md-4">
             <div className="thumbnail no-border">
               <div className="caption">
@@ -38,7 +40,21 @@ var StreamsPage = React.createClass({
             </div>
           </div>
         );
-      });
+        // Add a clearfix when appropriate in order to fix vertical alignment
+        // issues with divs of different heights
+        if (i && i % 2) {
+          streamComponents.push(
+            <div className="clearfix visible-sm-block" key={'clearfix__' + i}/>
+          );
+        } else if (i && i % 3) {
+          streamComponents.push(
+            <div
+              className="clearfix visible-md-block visible-lg-block"
+              key={'clearfix__' + i}
+            />
+          );
+        }
+      }
 
       if (!streamComponents.length) {
         streamComponents = (
