@@ -33,8 +33,6 @@ public class ChatBoxMain : MonoBehaviour
     public string stream_id = "";
     public float checkConnectionDelay = 3; //seconds
     public GameObject msgPrefab;
-    public GameObject msgPrefab_Dummy;
-    //public GameObject ChatPanel;
     public Transform msgParentPanel;    
     public Text titleText;
 
@@ -57,13 +55,9 @@ public class ChatBoxMain : MonoBehaviour
     string[] colors = { "red", "green", "blue", "cyan", "yellow" };    Dictionary<string, string> userToColor = new Dictionary<string, string>();
     int colorIdx = 0;
 
-    VerticalLayoutGroup lg;
-
-
     // Use this for initialization
     void Start()
     {
-        lg = gameObject.GetComponent<VerticalLayoutGroup>();
         chat = gameObject.GetComponent<CanvasGroup>();
         //set viewer chat to transparent
         chat.alpha = 0;
@@ -181,7 +175,6 @@ public class ChatBoxMain : MonoBehaviour
         Vector3 scale = new Vector3(0.9999998f, 0.9999998f, 0.9999998f);
         msgClone.transform.localScale = scale;
 
-
         string color = getColor(user);
 
         msgClone.GetComponent<Message>().showMessage(user, msg, color);
@@ -197,26 +190,6 @@ public class ChatBoxMain : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(gameObject.GetComponent<RectTransform>());
         return msgClone;
-    }
-
-    void setDummy()
-    {
-        GameObject msgClone = Instantiate(msgPrefab_Dummy, msgParentPanel);
-
-        Vector3 currentPos = msgClone.transform.localPosition;
-        msgClone.transform.localPosition = new Vector3(currentPos.x, currentPos.y, 0f);
-
-        Vector3 scale = new Vector3(0.9999998f, 0.9999998f, 0.9999998f);
-        msgClone.transform.localScale = scale;
-
-        //if weird hololens bug happens, try uncommenting these:
-        msgClone.transform.position = msgPrefab.transform.position;
-        msgClone.transform.localPosition = msgPrefab.transform.localPosition;
-        msgClone.transform.eulerAngles = msgPrefab.transform.eulerAngles;
-        msgClone.transform.localEulerAngles = msgPrefab.transform.localEulerAngles;
-        msgClone.transform.rotation = msgPrefab.transform.rotation;
-        msgClone.transform.localRotation = msgPrefab.transform.localRotation;
-        msgClone.transform.localScale = msgPrefab.transform.localScale;
     }
 
     public string getURL()
